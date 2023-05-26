@@ -12,6 +12,7 @@ class MusicList extends StatelessWidget {
         itemBuilder: (context, index) {
           return Card(
             elevation: 2,
+            color: Colors.tealAccent,
             child: ListTile(
               leading: Container(
                 height: 60,

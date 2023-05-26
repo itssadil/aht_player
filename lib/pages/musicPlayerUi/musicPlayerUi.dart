@@ -1,3 +1,4 @@
+import 'package:ahtplayer/pages/widgets/title.dart';
 import 'package:flutter/material.dart';
 
 import 'subpages/allSongs.dart';
@@ -14,6 +15,22 @@ class MusicPlayerUI extends StatefulWidget {
 }
 
 class _MusicPlayerUIState extends State<MusicPlayerUI> {
+  TimeOfDay selectedTime = TimeOfDay.now();
+  String appTitle = "AHT Player";
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+
+    if (pickedTime != null && pickedTime != selectedTime) {
+      setState(() {
+        appTitle = "Music off at ${pickedTime.format(context)}";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,10 +39,16 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
     return Scaffold(
       backgroundColor: Color(0xff001BF6),
       appBar: AppBar(
-        title: Text('AHT Player'),
+        title: title(appTitle: appTitle),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () => _selectTime(context),
+            icon: Icon(Icons.timer_sharp),
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: Container(

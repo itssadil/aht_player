@@ -1,3 +1,4 @@
+import 'package:ahtplayer/pages/widgets/title.dart';
 import 'package:flutter/material.dart';
 
 import 'subPages/musicCat.dart';
@@ -15,8 +16,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AHT Player'),
+        title: title(appTitle: 'AHT Player'),
         centerTitle: true,
+        foregroundColor: Colors.lightBlue,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
       ),
       body: Column(
