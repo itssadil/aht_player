@@ -2,7 +2,10 @@ import 'package:ahtplayer/pages/musicPlayerUi/musicPlayerUi.dart';
 import 'package:flutter/material.dart';
 
 class MusicList extends StatelessWidget {
-  const MusicList({Key? key}) : super(key: key);
+  Color clr;
+  double elvtion;
+  Color txtClr;
+  MusicList(this.clr, this.elvtion, this.txtClr);
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +14,8 @@ class MusicList extends StatelessWidget {
         itemCount: 20,
         itemBuilder: (context, index) {
           return Card(
-            elevation: 2,
-            color: Colors.tealAccent,
+            elevation: elvtion,
+            color: clr,
             child: ListTile(
               leading: Container(
                 height: 60,
@@ -29,12 +32,15 @@ class MusicList extends StatelessWidget {
               title: Text(
                 "Song Title Song Title $index",
                 overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: txtClr),
               ),
               subtitle: Text(
                 "Song Title Song TitleSong Title $index",
                 overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: txtClr),
               ),
               trailing: PopupMenuButton(
+                icon: Icon(Icons.more_vert, color: Colors.teal),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: () {},

@@ -1,3 +1,4 @@
+import 'package:ahtplayer/pages/widgets/musicList.dart';
 import 'package:flutter/material.dart';
 
 class allSongs extends StatelessWidget {
@@ -30,28 +31,7 @@ class allSongs extends StatelessWidget {
       backgroundColor: Color(0xff001BF6).withOpacity(0.2),
       context: context,
       builder: (BuildContext context) {
-        return ListView.builder(
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return Card(
-              color: Color(0xff001BF6).withOpacity(0.2),
-              // elevation: 0,
-              child: ListTile(
-                leading: Icon(Icons.music_note_sharp, color: Colors.white),
-                title: Text(
-                  "Song Title $index",
-                  style: TextStyle(color: Colors.white),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: IconButton(
-                  icon:
-                      Icon(Icons.favorite_border_outlined, color: Colors.white),
-                  onPressed: () {},
-                ),
-              ),
-            );
-          },
-        );
+        return MusicList(Color(0xff001BF6).withOpacity(0.5), 0, Colors.white);
       },
     );
   }

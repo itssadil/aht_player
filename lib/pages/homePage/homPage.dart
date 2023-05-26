@@ -1,8 +1,8 @@
 import 'package:ahtplayer/pages/widgets/title.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/musicList.dart';
 import 'subPages/musicCat.dart';
-import 'subPages/musicList.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           MusicCat(),
-          MusicList(),
+          MusicList(Colors.tealAccent, 2, Colors.black),
         ],
       ),
     );
