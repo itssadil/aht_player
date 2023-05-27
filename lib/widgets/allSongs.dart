@@ -57,22 +57,22 @@ class AllSongs extends StatelessWidget {
                 ),
                 isFav
                     ? PopupMenuItem(
-                        onTap: () => favIndex.removeFav(index),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Unfavorite"),
-                            Icon(Icons.heart_broken),
-                          ],
-                        ),
-                      )
-                    : PopupMenuItem(
                         onTap: () => favIndex.addFav(index),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Favorite"),
                             Icon(Icons.favorite),
+                          ],
+                        ),
+                      )
+                    : PopupMenuItem(
+                        onTap: () => favIndex.removeFav(index),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Unfavorite"),
+                            Icon(Icons.heart_broken),
                           ],
                         ),
                       ),

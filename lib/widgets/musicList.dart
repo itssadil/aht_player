@@ -21,20 +21,21 @@ class MusicList extends StatelessWidget {
               switch (value.homeTab) {
                 case 1:
                   return ListView.builder(
-                    itemCount: favValue.favList.length,
+                    itemCount: 20,
                     itemBuilder: (context, index) {
-                      // if (favValue.favList[index] != index)
-                      //   return AllSongs(clr, elvtion, txtClr, index, true);
-                      for (index; index < 20; index++)
-                        if (favValue.favList.contains("$index") != "$index")
-                          return AllSongs(clr, elvtion, txtClr, index, true);
+                      // for (index; index < 20; index++)
+                      if (favValue.favList.contains(index))
+                        return AllSongs(clr, elvtion, txtClr, index, false);
+                      return Container();
                     },
                   );
                 default:
                   return ListView.builder(
                     itemCount: 20,
                     itemBuilder: (context, index) {
-                      return AllSongs(clr, elvtion, txtClr, index, false);
+                      return favValue.favList.contains(index)
+                          ? AllSongs(clr, elvtion, txtClr, index, false)
+                          : AllSongs(clr, elvtion, txtClr, index, true);
                     },
                   );
               }

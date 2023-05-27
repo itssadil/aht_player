@@ -9,6 +9,7 @@ class FavoriteProvider with ChangeNotifier {
   }
 
   removeFav(favIndex) {
+    // _favList.removeAt(favIndex);
     _favList.remove(favIndex);
     notifyListeners();
   }
