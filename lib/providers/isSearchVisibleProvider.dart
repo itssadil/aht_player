@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class IsSearchVisibleProvider with ChangeNotifier {
   bool _isSearchVisible = false;

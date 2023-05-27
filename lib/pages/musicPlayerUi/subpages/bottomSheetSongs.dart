@@ -1,4 +1,4 @@
-import 'package:ahtplayer/pages/widgets/musicList.dart';
+import 'package:ahtplayer/widgets/musicList.dart';
 import 'package:flutter/material.dart';
 
 class allSongs extends StatelessWidget {

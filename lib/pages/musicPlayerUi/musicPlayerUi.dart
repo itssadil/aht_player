@@ -1,7 +1,7 @@
-import 'package:ahtplayer/pages/widgets/title.dart';
+import 'package:ahtplayer/widgets/title.dart';
 import 'package:flutter/material.dart';
 
-import 'subpages/allSongs.dart';
+import 'subpages/bottomSheetSongs.dart';
 import 'subpages/headerPic.dart';
 import 'subpages/musicTimer.dart';
 import 'subpages/playIcons.dart';
