@@ -2,6 +2,7 @@ import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/isSearchVisibleProvider.dart';
 import 'package:ahtplayer/widgets/title.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'subPages/favorite.dart';
@@ -18,8 +19,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    requestPermission();
+  }
+
+  void requestPermission() async {
+    Permission.storage.request();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // bool isSearchVisible = false;
     return Scaffold(
       appBar: AppBar(
         title: title(appTitle: 'AHT Player'),

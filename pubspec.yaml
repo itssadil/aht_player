@@ -49,6 +49,8 @@ dev_dependencies:
   provider: ^6.0.5
   lottie: ^2.3.2
   audioplayers: ^4.0.1
+  on_audio_query: ^2.9.0
+  permission_handler: ^10.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

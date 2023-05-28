@@ -10,9 +10,11 @@ class AllSongs extends StatelessWidget {
   int index;
   bool isFav;
   bool isBtmSheet;
+  var title;
+  var subTitle;
 
   AllSongs(this.clr, this.elvtion, this.txtClr, this.index, this.isFav,
-      this.isBtmSheet);
+      this.isBtmSheet, this.title, this.subTitle);
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +35,14 @@ class AllSongs extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Song Title Song Title $index",
+          "$title",
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: txtClr),
         ),
         subtitle: Text(
-          "Song Title Song TitleSong Title $index",
+          subTitle,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: txtClr),
+          style: TextStyle(color: txtClr.withOpacity(0.5)),
         ),
         trailing: Consumer<FavoriteProvider>(
           builder: (context, favIndex, child) {
