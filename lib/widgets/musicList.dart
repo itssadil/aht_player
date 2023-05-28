@@ -46,7 +46,7 @@ class MusicList extends StatelessWidget {
                   switch (value.homeTab) {
                     case 1:
                       return ListView.builder(
-                        itemCount: 20,
+                        itemCount: items.data!.length,
                         itemBuilder: (context, index) {
                           String songTitle =
                               items.data![index].displayNameWOExt;
@@ -76,7 +76,7 @@ class MusicList extends StatelessWidget {
                       );
                     default:
                       return ListView.builder(
-                        itemCount: 20,
+                        itemCount: items.data!.length,
                         itemBuilder: (context, index) {
                           String songTitle =
                               items.data![index].displayNameWOExt;
