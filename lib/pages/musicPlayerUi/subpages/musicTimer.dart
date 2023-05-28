@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-Widget musicTimer({required Size size}) {
+Widget musicTimer(
+    {required Size size,
+    required Duration duration,
+    required Duration position}) {
   return Column(
     children: [
       Slider(
@@ -15,11 +18,11 @@ Widget musicTimer({required Size size}) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "01:37",
+              "${position.toString().split(".")[0]}",
               style: TextStyle(color: Colors.white70),
             ),
             Text(
-              "04:56",
+              "${duration.toString().split(".")[0]}",
               style: TextStyle(color: Colors.white70),
             ),
           ],

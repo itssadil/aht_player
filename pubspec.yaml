@@ -48,7 +48,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   provider: ^6.0.5
   lottie: ^2.3.2
-  audioplayers: ^4.0.1
+  just_audio: ^0.9.33
   on_audio_query: ^2.9.0
   permission_handler: ^10.2.0
 

@@ -2,6 +2,7 @@ import 'package:ahtplayer/providers/favoriteProvider.dart';
 import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/widgets/allSongs.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -10,8 +11,10 @@ class MusicList extends StatelessWidget {
   double elvtion;
   Color txtClr;
   bool isBtmSheet;
+  final AudioPlayer audioPlayer;
 
-  MusicList(this.clr, this.elvtion, this.txtClr, this.isBtmSheet);
+  MusicList(
+      this.clr, this.elvtion, this.txtClr, this.isBtmSheet, this.audioPlayer);
 
   final OnAudioQuery _audioQuery = new OnAudioQuery();
 
@@ -51,6 +54,8 @@ class MusicList extends StatelessWidget {
                           String songTitle =
                               items.data![index].displayNameWOExt;
 
+                          var songUri = items.data![index].uri;
+
                           String songArtist =
                               items.data![index].artist.toString();
                           if (songArtist == "<unknown>") {
@@ -69,6 +74,8 @@ class MusicList extends StatelessWidget {
                               isBtmSheet,
                               songTitle,
                               songSubTitle,
+                              songUri,
+                              audioPlayer,
                             );
                           }
                           return Container();
@@ -80,6 +87,7 @@ class MusicList extends StatelessWidget {
                         itemBuilder: (context, index) {
                           String songTitle =
                               items.data![index].displayNameWOExt;
+                          var songUri = items.data![index].uri;
 
                           String songArtist =
                               items.data![index].artist.toString();
@@ -99,6 +107,8 @@ class MusicList extends StatelessWidget {
                                   isBtmSheet,
                                   songTitle,
                                   songSubTitle,
+                                  songUri,
+                                  audioPlayer,
                                 )
                               : AllSongs(
                                   clr,
@@ -109,6 +119,8 @@ class MusicList extends StatelessWidget {
                                   isBtmSheet,
                                   songTitle,
                                   songSubTitle,
+                                  songUri,
+                                  audioPlayer,
                                 );
                         },
                       );

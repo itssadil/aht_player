@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:ahtplayer/widgets/title.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 import 'subpages/bottomSheetSongs.dart';
 import 'subpages/headerPic.dart';
@@ -8,13 +11,53 @@ import 'subpages/playIcons.dart';
 import 'subpages/songTitle.dart';
 
 class MusicPlayerUI extends StatefulWidget {
-  const MusicPlayerUI({Key? key}) : super(key: key);
+  var title;
+  var subTitle;
+  var songUri;
+  final AudioPlayer audioPlayer;
+  MusicPlayerUI(this.title, this.subTitle, this.songUri, this.audioPlayer);
 
   @override
-  State<MusicPlayerUI> createState() => _MusicPlayerUIState();
+  State<MusicPlayerUI> createState() =>
+      _MusicPlayerUIState(title, subTitle, songUri);
 }
 
 class _MusicPlayerUIState extends State<MusicPlayerUI> {
+  var musicTitle;
+  var subTitle;
+  var songUri;
+  _MusicPlayerUIState(this.musicTitle, this.subTitle, this.songUri);
+
+  Duration _duration = const Duration();
+  Duration _position = const Duration();
+  @override
+  void initState() {
+    super.initState();
+    playSong(songUri);
+  }
+
+  playSong(songUri) {
+    try {
+      widget.audioPlayer.setAudioSource(
+        AudioSource.uri(Uri.parse(songUri)),
+      );
+      widget.audioPlayer.play();
+    } on Exception {
+      log("Error persing song");
+    }
+
+    widget.audioPlayer.durationStream.listen((d) {
+      setState(() {
+        _duration = d!;
+      });
+    });
+    widget.audioPlayer.positionStream.listen((d) {
+      setState(() {
+        _position = d;
+      });
+    });
+  }
+
   TimeOfDay selectedTime = TimeOfDay.now();
   String appTitle = "AHT Player";
 
@@ -70,13 +113,15 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     headerPage(size: size, albumCover: albumCover),
-                    songTitle(size: size),
-                    musicTimer(size: size),
-                    playIcons(),
+                    songTitle(
+                        size: size, songTitle: musicTitle, subTitle: subTitle),
+                    musicTimer(
+                        size: size, duration: _duration, position: _position),
+                    PlayIcons(musicTitle, widget.audioPlayer),
                   ],
                 ),
               ),
-              allSongs(),
+              allBtmSongs(),
             ],
           ),
         ),
