@@ -6,6 +6,6 @@ class Songs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MusicList(Colors.tealAccent, 2, Colors.black);
+    return MusicList(Colors.tealAccent, 2, Colors.black, false);
   }
 }

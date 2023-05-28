@@ -31,7 +31,8 @@ class allSongs extends StatelessWidget {
       backgroundColor: Color(0xff001BF6).withOpacity(0.2),
       context: context,
       builder: (BuildContext context) {
-        return MusicList(Color(0xff001BF6).withOpacity(0.5), 0, Colors.white);
+        return MusicList(
+            Color(0xff001BF6).withOpacity(0.5), 0, Colors.white, true);
       },
     );
   }

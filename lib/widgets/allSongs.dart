@@ -9,8 +9,10 @@ class AllSongs extends StatelessWidget {
   Color txtClr;
   int index;
   bool isFav;
+  bool isBtmSheet;
 
-  AllSongs(this.clr, this.elvtion, this.txtClr, this.index, this.isFav);
+  AllSongs(this.clr, this.elvtion, this.txtClr, this.index, this.isFav,
+      this.isBtmSheet);
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +93,22 @@ class AllSongs extends StatelessWidget {
           },
         ),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MusicPlayerUI(),
-            ),
-          );
+          if (isBtmSheet == true) {
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MusicPlayerUI(),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MusicPlayerUI(),
+              ),
+            );
+          }
         },
       ),
     );

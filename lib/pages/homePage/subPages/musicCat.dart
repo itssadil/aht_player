@@ -57,7 +57,6 @@ class MusicCat extends StatelessWidget {
             width: size.width * 0.25,
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              // color: clr,
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,

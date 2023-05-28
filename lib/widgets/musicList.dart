@@ -8,8 +8,9 @@ class MusicList extends StatelessWidget {
   Color clr;
   double elvtion;
   Color txtClr;
+  bool isBtmSheet;
 
-  MusicList(this.clr, this.elvtion, this.txtClr);
+  MusicList(this.clr, this.elvtion, this.txtClr, this.isBtmSheet);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,8 @@ class MusicList extends StatelessWidget {
                     itemBuilder: (context, index) {
                       // for (index; index < 20; index++)
                       if (favValue.favList.contains(index))
-                        return AllSongs(clr, elvtion, txtClr, index, false);
+                        return AllSongs(
+                            clr, elvtion, txtClr, index, false, isBtmSheet);
                       return Container();
                     },
                   );
@@ -34,8 +36,10 @@ class MusicList extends StatelessWidget {
                     itemCount: 20,
                     itemBuilder: (context, index) {
                       return favValue.favList.contains(index)
-                          ? AllSongs(clr, elvtion, txtClr, index, false)
-                          : AllSongs(clr, elvtion, txtClr, index, true);
+                          ? AllSongs(
+                              clr, elvtion, txtClr, index, false, isBtmSheet)
+                          : AllSongs(
+                              clr, elvtion, txtClr, index, true, isBtmSheet);
                     },
                   );
               }
