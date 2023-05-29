@@ -4,19 +4,19 @@ import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
 class PlayIcons extends StatefulWidget {
-  var songUri;
+  var songModel;
   final AudioPlayer audioPlayer;
 
-  PlayIcons(this.songUri, this.audioPlayer);
+  PlayIcons(this.songModel, this.audioPlayer);
 
   @override
-  State<PlayIcons> createState() => _PlayIconsState(songUri);
+  State<PlayIcons> createState() => _PlayIconsState(songModel);
 }
 
 class _PlayIconsState extends State<PlayIcons> {
-  var songUri;
+  var songModel;
 
-  _PlayIconsState(this.songUri);
+  _PlayIconsState(this.songModel);
 
   @override
   Widget build(BuildContext context) {

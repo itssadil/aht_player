@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-Widget songTitle(
-    {required Size size, required String songTitle, required String subTitle}) {
+Widget songTitle({required Size size, required var songModel}) {
+  String songArtist = songModel.artist.toString();
+  if (songArtist == "<unknown>") {
+    songArtist = "Unknown Artist";
+  }
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -12,7 +15,7 @@ Widget songTitle(
         child: Column(
           children: [
             Text(
-              songTitle,
+              songModel.displayNameWOExt,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -20,11 +23,9 @@ Widget songTitle(
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              subTitle,
+              "$songArtist / ${songModel.album}",
               style: TextStyle(
-                  color: Colors.lightBlueAccent,
-                  // fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                  color: Colors.lightBlueAccent, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
             ),
           ],

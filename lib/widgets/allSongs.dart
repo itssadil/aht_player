@@ -3,6 +3,7 @@ import 'package:ahtplayer/providers/favoriteProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 class AllSongs extends StatelessWidget {
@@ -12,9 +13,11 @@ class AllSongs extends StatelessWidget {
   int index;
   bool isFav;
   bool isBtmSheet;
-  var title;
-  var subTitle;
-  var songUri;
+  var songModel;
+  // var title;
+  // var subTitle;
+  // var songUri;
+  // var albumCoverId;
   final AudioPlayer audioPlayer;
 
   AllSongs(
@@ -24,39 +27,45 @@ class AllSongs extends StatelessWidget {
     this.index,
     this.isFav,
     this.isBtmSheet,
-    this.title,
-    this.subTitle,
-    this.songUri,
+    this.songModel,
+    // this.title,
+    // this.subTitle,
+    // this.songUri,
     this.audioPlayer,
+    // this.albumCoverId,
   );
 
   @override
   Widget build(BuildContext context) {
+    String songArtist = songModel.artist.toString();
+    if (songArtist == "<unknown>") {
+      songArtist = "Unknown Artist";
+    }
     return Card(
       elevation: elvtion,
       color: clr,
       child: Consumer<PlayPause>(
         builder: (context, playPause, child) {
           return ListTile(
-            leading: Container(
-              height: 60,
-              width: 65,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(
-                      "https://img.freepik.com/free-vector/app-development-banner_33099-1720.jpg"),
-                  fit: BoxFit.cover,
-                ),
+            leading: QueryArtworkWidget(
+              id: songModel.id,
+              type: ArtworkType.AUDIO,
+              artworkBorder: BorderRadius.circular(10),
+              artworkHeight: 45,
+              artworkWidth: 50,
+              nullArtworkWidget: Icon(
+                Icons.image,
+                size: 45,
+                color: Colors.teal.withOpacity(0.7),
               ),
             ),
             title: Text(
-              "$title",
+              "${songModel.displayNameWOExt}",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: txtClr),
             ),
             subtitle: Text(
-              subTitle,
+              "$songArtist / ${songModel.album}",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: txtClr.withOpacity(0.5)),
             ),
@@ -121,8 +130,7 @@ class AllSongs extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        MusicPlayerUI(title, subTitle, songUri, audioPlayer),
+                    builder: (context) => MusicPlayerUI(songModel, audioPlayer),
                   ),
                 );
               } else {
@@ -130,8 +138,7 @@ class AllSongs extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        MusicPlayerUI(title, subTitle, songUri, audioPlayer),
+                    builder: (context) => MusicPlayerUI(songModel, audioPlayer),
                   ),
                 );
               }

@@ -1,13 +1,21 @@
+import 'package:ahtplayer/providers/durPosProvider.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
 import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/isSearchVisibleProvider.dart';
 import 'splash.dart';
 
-void main() {
+Future<void> main() async {
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
+
   runApp(
     MultiProvider(
       providers: [
@@ -15,6 +23,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => IsSearchVisibleProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => PlayPause()),
+        ChangeNotifierProvider(create: (_) => DurPosProvider()),
       ],
       child: MyApp(),
     ),
