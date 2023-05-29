@@ -5,6 +5,7 @@ import 'package:ahtplayer/widgets/title.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import 'subpages/bottomSheetSongs.dart';
@@ -103,39 +104,53 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
         ],
       ),
       extendBodyBehindAppBar: true,
-      body: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage(albumCover),
-            fit: BoxFit.cover,
-            opacity: 0.2,
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Divider(color: Colors.white54),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    headerPic(
-                      size: size,
-                      albumCover: albumCover,
-                      albumCoverId: widget.songModel.id,
-                    ),
-                    songTitle(size: size, songModel: widget.songModel),
-                    musicTimer(size: size, audioPlayer: widget.audioPlayer),
-                    PlayIcons(widget.songModel, widget.audioPlayer),
-                  ],
+      body: Stack(
+        children: [
+          Positioned(
+            child: Opacity(
+              opacity: 0.3,
+              child: QueryArtworkWidget(
+                id: widget.songModel.id,
+                type: ArtworkType.AUDIO,
+                artworkBorder: BorderRadius.circular(10),
+                artworkHeight: size.height,
+                artworkWidth: size.width,
+                nullArtworkWidget: Image.asset(
+                  albumCover,
+                  fit: BoxFit.cover,
+                  width: size.width,
+                  height: size.height,
                 ),
               ),
-              allBtmSongs(),
-            ],
+            ),
           ),
-        ),
+          Container(
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Divider(color: Colors.white54),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        headerPic(
+                          size: size,
+                          albumCover: albumCover,
+                          albumCoverId: widget.songModel.id,
+                        ),
+                        songTitle(size: size, songModel: widget.songModel),
+                        musicTimer(size: size, audioPlayer: widget.audioPlayer),
+                        PlayIcons(widget.songModel, widget.audioPlayer),
+                      ],
+                    ),
+                  ),
+                  allBtmSongs(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
