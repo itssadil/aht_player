@@ -50,6 +50,7 @@ class MusicList extends StatelessWidget {
                   switch (value.homeTab) {
                     case 1:
                       return ListView.builder(
+                        padding: EdgeInsets.only(bottom: 75),
                         itemCount: items.data!.length,
                         itemBuilder: (context, index) {
                           var songModel = items.data![index];
@@ -74,6 +75,7 @@ class MusicList extends StatelessWidget {
                       );
                     default:
                       return ListView.builder(
+                        padding: EdgeInsets.only(bottom: 75),
                         itemCount: items.data!.length,
                         itemBuilder: (context, index) {
                           var songModel = items.data![index];

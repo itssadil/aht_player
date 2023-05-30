@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:ahtplayer/providers/TimerVisibleProvider.dart';
 import 'package:ahtplayer/providers/durPosProvider.dart';
-import 'package:ahtplayer/widgets/title.dart';
+import 'package:ahtplayer/providers/playPauseProvider.dart';
+import 'package:ahtplayer/providers/timerWatchProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -31,7 +34,14 @@ class MusicPlayerUI extends StatefulWidget {
 
 class _MusicPlayerUIState extends State<MusicPlayerUI> {
   var myProvider;
+  var myWatchProvider;
+  var myPlayPauseProvider;
+  var myTimerVisibleProvider;
+  late Timer watchTimer;
+  late Duration difference;
   List<AudioSource> songList = [];
+  bool isSelectTime = false;
+
   // int songIndex = widget.songIndex;
 
   @override
@@ -43,6 +53,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
 
   playSong() {
     myProvider = Provider.of<DurPosProvider>(context, listen: false);
+
     try {
       widget.songModel.forEach((element) {
         songList.add(
@@ -52,7 +63,8 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
               id: element.id.toString(),
               album: element.album,
               title: element.displayNameWOExt,
-              artUri: Uri.parse('https://example.com/albumart.jpg'),
+              artUri: Uri.parse(
+                  "https://raw.githubusercontent.com/itssadil/aht_player/master/photo-1680357981460-f00398bafd42.jpg"),
             ),
           ),
         );
@@ -96,9 +108,63 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
     );
 
     if (pickedTime != null && pickedTime != selectedTime) {
-      setState(() {
-        appTitle = "Music off at ${pickedTime.format(context)}";
+      myWatchProvider = Provider.of<TimerWatch>(context, listen: false);
+      myPlayPauseProvider = Provider.of<PlayPause>(context, listen: false);
+      myTimerVisibleProvider =
+          Provider.of<TimerVisible>(context, listen: false);
+
+      final dateTime2 = DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, pickedTime.hour, pickedTime.minute);
+      final currentTime = TimeOfDay.fromDateTime(DateTime.now());
+      final dateTime1 = DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, currentTime.hour, currentTime.minute);
+      difference = dateTime2.difference(dateTime1);
+
+      int hours = difference.inHours;
+      int minutes = difference.inMinutes.remainder(60) - 1;
+      int second = 59;
+
+      watchTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (second < 0) {
+          second = 59;
+          minutes = minutes - 1;
+        }
+        if (minutes == 60) {
+          minutes = 59;
+          hours = hours + 1;
+        }
+        if (minutes < 0) {
+          minutes = 59;
+          hours = hours - 1;
+        }
+        final formattedDuration =
+            '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${second.toString().padLeft(2, '0')}';
+
+        appTitle = "$formattedDuration";
+        if (hours < 0) {
+          timer.cancel();
+          appTitle = "00:00:00";
+          widget.audioPlayer.pause();
+        }
+        myWatchProvider.changeTimerWatch(appTitle);
+
+        if (widget.audioPlayer.playing == false &&
+            myPlayPauseProvider.playPauseIcon == Icons.pause_circle) {
+          myPlayPauseProvider.changePlayPauseIcon();
+          myTimerVisibleProvider.changeHomeValue();
+        }
+
+        second--;
       });
+
+      myTimerVisibleProvider.changeHomeValue();
+    }
+  }
+
+  stopTimer() {
+    if (watchTimer.isActive) {
+      watchTimer.cancel();
+      myTimerVisibleProvider.changeHomeValue();
     }
   }
 
@@ -109,14 +175,34 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
     return Scaffold(
       backgroundColor: Color(0xff001BF6),
       appBar: AppBar(
-        title: title(appTitle: appTitle),
+        // title: title(appTitle: appTitle),
+        title: Consumer<TimerWatch>(
+            builder: (context, value, child) => Text(value.appTitle)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          IconButton(
-            onPressed: () => _selectTime(context),
-            icon: Icon(Icons.timer_sharp),
+          Consumer<TimerVisible>(
+            builder: (context, isTimerVisible, child) {
+              return Visibility(
+                visible: isTimerVisible.isTimerVisible,
+                child: IconButton(
+                  onPressed: () => _selectTime(context),
+                  icon: Icon(Icons.timer_sharp),
+                ),
+              );
+            },
+          ),
+          Consumer<TimerVisible>(
+            builder: (context, isTimerVisible, child) {
+              return Visibility(
+                visible: !isTimerVisible.isTimerVisible,
+                child: IconButton(
+                  onPressed: () => stopTimer(),
+                  icon: Icon(Icons.cancel_outlined),
+                ),
+              );
+            },
           ),
         ],
       ),

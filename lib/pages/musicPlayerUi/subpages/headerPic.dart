@@ -11,11 +11,16 @@ Widget headerPic(
     artworkBorder: BorderRadius.circular(10),
     artworkHeight: size.width * 0.9,
     artworkWidth: size.width * 0.9,
-    nullArtworkWidget: Image.asset(
-      albumCover,
-      fit: BoxFit.cover,
+    nullArtworkWidget: Container(
       width: size.width * 0.9,
       height: size.width * 0.9,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: AssetImage(albumCover),
+          fit: BoxFit.cover,
+        ),
+      ),
     ),
   );
 }

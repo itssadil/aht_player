@@ -41,7 +41,6 @@ class _PlayIconsState extends State<PlayIcons> {
                     ),
                     onPressed: () {
                       isLooping.changeSongLooping();
-                      // widget.audioPlayer.setLoopMode(LoopMode.one);
                     },
                   ),
                 );
@@ -74,7 +73,7 @@ class _PlayIconsState extends State<PlayIcons> {
                   ),
                   onPressed: () {
                     if (playPauseIcon.playPauseIcon != Icons.play_circle) {
-                      widget.audioPlayer.pause();
+                      widget.audioPlayer.stop();
                     } else {
                       widget.audioPlayer.play();
                     }

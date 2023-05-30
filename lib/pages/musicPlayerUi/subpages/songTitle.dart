@@ -1,4 +1,6 @@
+import 'package:ahtplayer/providers/favoriteProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Widget songTitle({
   required Size size,
@@ -35,10 +37,21 @@ Widget songTitle({
           ],
         ),
       ),
-      IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.favorite_border_outlined,
-              color: Colors.lightBlueAccent)),
+      Consumer<FavoriteProvider>(
+        builder: (context, value, child) {
+          return IconButton(
+            onPressed: () => value.favList.contains(songIndex)
+                ? value.removeFav(songIndex)
+                : value.addFav(songIndex),
+            icon: Icon(
+              value.favList.contains(songIndex)
+                  ? Icons.favorite
+                  : Icons.favorite_border_outlined,
+              color: Colors.lightBlueAccent,
+            ),
+          );
+        },
+      ),
     ],
   );
 }

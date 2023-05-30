@@ -48,33 +48,38 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Consumer<IsSearchVisibleProvider>(
-            builder: (context, isSearchVisible, child) {
-              return Visibility(
-                visible: !isSearchVisible.isSearchVisible,
-                child: MusicCat(),
-              );
-            },
-          ),
-          Consumer<IsSearchVisibleProvider>(
-            builder: (context, isSearchVisible, child) {
-              return Visibility(
-                visible: isSearchVisible.isSearchVisible,
-                child: Search(),
-              );
-            },
-          ),
-          Consumer<HomeProvider>(
-            builder: (context, homeTab, child) {
-              switch (homeTab.homeTab) {
-                case 1:
-                  return Favorite();
-                default:
-                  return Songs();
-              }
-            },
+          Column(
+            children: [
+              Consumer<IsSearchVisibleProvider>(
+                builder: (context, isSearchVisible, child) {
+                  return Visibility(
+                    visible: !isSearchVisible.isSearchVisible,
+                    child: MusicCat(),
+                  );
+                },
+              ),
+              Consumer<IsSearchVisibleProvider>(
+                builder: (context, isSearchVisible, child) {
+                  return Visibility(
+                    visible: isSearchVisible.isSearchVisible,
+                    child: Search(),
+                  );
+                },
+              ),
+              Consumer<HomeProvider>(
+                builder: (context, homeTab, child) {
+                  switch (homeTab.homeTab) {
+                    case 1:
+                      return Favorite();
+                    default:
+                      return Songs();
+                  }
+                },
+              ),
+              // SizedBox(height: 20),
+            ],
           ),
         ],
       ),

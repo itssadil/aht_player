@@ -1,9 +1,11 @@
+import 'package:ahtplayer/providers/TimerVisibleProvider.dart';
 import 'package:ahtplayer/providers/durPosProvider.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
 import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/isLoopingProvider.dart';
 import 'package:ahtplayer/providers/isSuffleProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
+import 'package:ahtplayer/providers/timerWatchProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +15,8 @@ import 'splash.dart';
 
 Future<void> main() async {
   await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelId:
+        'ahtplayer.adilhussain.me.ahtplayer.channel.audio',
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
   );
@@ -28,6 +31,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => DurPosProvider()),
         ChangeNotifierProvider(create: (_) => IsSongLooping()),
         ChangeNotifierProvider(create: (_) => IsSongShuffle()),
+        ChangeNotifierProvider(create: (_) => TimerWatch()),
+        ChangeNotifierProvider(create: (_) => TimerVisible()),
       ],
       child: MyApp(),
     ),
