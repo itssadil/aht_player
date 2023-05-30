@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:ahtplayer/providers/TimerVisibleProvider.dart';
 import 'package:ahtplayer/providers/durPosProvider.dart';
+import 'package:ahtplayer/providers/musicPlayerTitleProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
-import 'package:ahtplayer/providers/timerWatchProvider.dart';
+import 'package:ahtplayer/providers/timerVisibleProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -34,7 +34,7 @@ class MusicPlayerUI extends StatefulWidget {
 
 class _MusicPlayerUIState extends State<MusicPlayerUI> {
   var myProvider;
-  var myWatchProvider;
+  var myMusicPlayerTitle;
   var myPlayPauseProvider;
   var myTimerVisibleProvider;
   late Timer watchTimer;
@@ -108,7 +108,8 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
     );
 
     if (pickedTime != null && pickedTime != selectedTime) {
-      myWatchProvider = Provider.of<TimerWatch>(context, listen: false);
+      myMusicPlayerTitle =
+          Provider.of<MusicPlayerTitle>(context, listen: false);
       myPlayPauseProvider = Provider.of<PlayPause>(context, listen: false);
       myTimerVisibleProvider =
           Provider.of<TimerVisible>(context, listen: false);
@@ -146,7 +147,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
           appTitle = "00:00:00";
           widget.audioPlayer.pause();
         }
-        myWatchProvider.changeTimerWatch(appTitle);
+        myMusicPlayerTitle.changeTimerWatch(appTitle);
 
         if (widget.audioPlayer.playing == false &&
             myPlayPauseProvider.playPauseIcon == Icons.pause_circle) {
@@ -162,10 +163,13 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
   }
 
   stopTimer() {
+    myMusicPlayerTitle = Provider.of<MusicPlayerTitle>(context, listen: false);
     if (watchTimer.isActive) {
       watchTimer.cancel();
-      myTimerVisibleProvider.changeHomeValue();
+      appTitle = "AHT Player";
+      myMusicPlayerTitle.changeTimerWatch(appTitle);
     }
+    myTimerVisibleProvider.changeHomeValue();
   }
 
   @override
@@ -176,7 +180,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
       backgroundColor: Color(0xff001BF6),
       appBar: AppBar(
         // title: title(appTitle: appTitle),
-        title: Consumer<TimerWatch>(
+        title: Consumer<MusicPlayerTitle>(
             builder: (context, value, child) => Text(value.appTitle)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
