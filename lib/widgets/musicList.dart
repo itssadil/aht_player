@@ -17,6 +17,7 @@ class MusicList extends StatelessWidget {
       this.clr, this.elvtion, this.txtClr, this.isBtmSheet, this.audioPlayer);
 
   final OnAudioQuery _audioQuery = new OnAudioQuery();
+  List<SongModel> allSongs = [];
 
   @override
   Widget build(BuildContext context) {
@@ -52,20 +53,7 @@ class MusicList extends StatelessWidget {
                         itemCount: items.data!.length,
                         itemBuilder: (context, index) {
                           var songModel = items.data![index];
-                          // String songTitle =
-                          //     items.data![index].displayNameWOExt;
-                          //
-                          // var songUri = items.data![index].uri;
-                          //
-                          // String songArtist =
-                          //     items.data![index].artist.toString();
-                          // if (songArtist == "<unknown>") {
-                          //   songArtist = "Unknown Artist";
-                          // }
-                          // String songSubTitle =
-                          //     "$songArtist / ${items.data![index].album}";
-                          //
-                          // var albunCoverId = items.data![index].id;
+                          allSongs.addAll(items.data!);
 
                           if (favValue.favList.contains(index)) {
                             return AllSongs(
@@ -75,12 +63,10 @@ class MusicList extends StatelessWidget {
                               index,
                               false,
                               isBtmSheet,
-                              songModel,
-                              // songTitle,
-                              // songSubTitle,
-                              // songUri,
+                              // songModel,
+                              allSongs,
                               audioPlayer,
-                              // albunCoverId,
+                              index,
                             );
                           }
                           return Container();
@@ -91,20 +77,8 @@ class MusicList extends StatelessWidget {
                         itemCount: items.data!.length,
                         itemBuilder: (context, index) {
                           var songModel = items.data![index];
-                          // String songTitle =
-                          //     items.data![index].displayNameWOExt;
-                          // var songUri = items.data![index].uri;
-                          //
-                          // String songArtist =
-                          //     items.data![index].artist.toString();
-                          // if (songArtist == "<unknown>") {
-                          //   songArtist = "Unknown Artist";
-                          // }
-                          // String songSubTitle =
-                          //     "$songArtist / ${items.data![index].album}";
-                          //
-                          // var albunCoverId = items.data![index].id;
 
+                          allSongs.addAll(items.data!);
                           return favValue.favList.contains(index)
                               ? AllSongs(
                                   clr,
@@ -113,12 +87,10 @@ class MusicList extends StatelessWidget {
                                   index,
                                   false,
                                   isBtmSheet,
-                                  songModel,
-                                  // songTitle,
-                                  // songSubTitle,
-                                  // songUri,
+                                  // songModel,
+                                  allSongs,
                                   audioPlayer,
-                                  // albunCoverId,
+                                  index,
                                 )
                               : AllSongs(
                                   clr,
@@ -127,12 +99,10 @@ class MusicList extends StatelessWidget {
                                   index,
                                   true,
                                   isBtmSheet,
-                                  songModel,
-                                  // songTitle,
-                                  // songSubTitle,
-                                  // songUri,
+                                  // songModel,
+                                  allSongs,
                                   audioPlayer,
-                                  // albunCoverId,
+                                  index,
                                 );
                         },
                       );

@@ -1,3 +1,5 @@
+import 'package:ahtplayer/providers/isLoopingProvider.dart';
+import 'package:ahtplayer/providers/isSuffleProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -20,34 +22,51 @@ class _PlayIconsState extends State<PlayIcons> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: IconButton(
-            icon: Icon(
-              Icons.repeat,
-              color: Colors.lightBlueAccent,
+    return Consumer<PlayPause>(
+      builder: (context, playPauseIcon, child) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Consumer<IsSongLooping>(
+              builder: (context, isLooping, child) {
+                widget.audioPlayer.setLoopMode(
+                    isLooping.isLooping ? LoopMode.one : LoopMode.all);
+                return Expanded(
+                  child: IconButton(
+                    icon: Icon(
+                      isLooping.isLooping ? Icons.repeat_one : Icons.repeat,
+                      color: isLooping.isLooping
+                          ? Colors.white
+                          : Colors.lightBlueAccent,
+                    ),
+                    onPressed: () {
+                      isLooping.changeSongLooping();
+                      // widget.audioPlayer.setLoopMode(LoopMode.one);
+                    },
+                  ),
+                );
+              },
             ),
-            onPressed: () {},
-          ),
-        ),
-        Expanded(
-          child: IconButton(
-            icon: Icon(
-              Icons.skip_previous,
-              size: 30,
-              color: Colors.white,
+            Expanded(
+              child: IconButton(
+                icon: Icon(
+                  Icons.skip_previous,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  widget.audioPlayer.seekToPrevious();
+                  if (playPauseIcon.playPauseIcon == Icons.play_circle) {
+                    playPauseIcon.changePlayPauseIcon();
+                    widget.audioPlayer.play();
+                  }
+                },
+              ),
             ),
-            onPressed: () {},
-          ),
-        ),
-        Expanded(
-          child: SizedBox(
-            height: 70,
-            child: Consumer<PlayPause>(
-              builder: (context, playPauseIcon, child) {
-                return IconButton(
+            Expanded(
+              child: SizedBox(
+                height: 70,
+                child: IconButton(
                   icon: Icon(
                     playPauseIcon.playPauseIcon,
                     size: 60,
@@ -61,31 +80,46 @@ class _PlayIconsState extends State<PlayIcons> {
                     }
                     playPauseIcon.changePlayPauseIcon();
                   },
+                ),
+              ),
+            ),
+            Expanded(
+              child: IconButton(
+                icon: Icon(
+                  Icons.skip_next,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  widget.audioPlayer.seekToNext();
+                  if (playPauseIcon.playPauseIcon == Icons.play_circle) {
+                    playPauseIcon.changePlayPauseIcon();
+                    widget.audioPlayer.play();
+                  }
+                },
+              ),
+            ),
+            Consumer<IsSongShuffle>(
+              builder: (context, isShuffle, child) {
+                widget.audioPlayer.setShuffleModeEnabled(isShuffle.isShuffle);
+                return Expanded(
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.shuffle,
+                      color: isShuffle.isShuffle
+                          ? Colors.white
+                          : Colors.lightBlueAccent,
+                    ),
+                    onPressed: () {
+                      isShuffle.changeSongSuffle();
+                    },
+                  ),
                 );
               },
             ),
-          ),
-        ),
-        Expanded(
-          child: IconButton(
-            icon: Icon(
-              Icons.skip_next,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          ),
-        ),
-        Expanded(
-          child: IconButton(
-            icon: Icon(
-              Icons.shuffle,
-              color: Colors.lightBlueAccent,
-            ),
-            onPressed: () {},
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }

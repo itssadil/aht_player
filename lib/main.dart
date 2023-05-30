@@ -1,6 +1,8 @@
 import 'package:ahtplayer/providers/durPosProvider.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
 import 'package:ahtplayer/providers/homeProvider.dart';
+import 'package:ahtplayer/providers/isLoopingProvider.dart';
+import 'package:ahtplayer/providers/isSuffleProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -24,6 +26,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => PlayPause()),
         ChangeNotifierProvider(create: (_) => DurPosProvider()),
+        ChangeNotifierProvider(create: (_) => IsSongLooping()),
+        ChangeNotifierProvider(create: (_) => IsSongShuffle()),
       ],
       child: MyApp(),
     ),

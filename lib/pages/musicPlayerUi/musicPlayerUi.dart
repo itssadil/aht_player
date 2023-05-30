@@ -15,19 +15,14 @@ import 'subpages/playIcons.dart';
 import 'subpages/songTitle.dart';
 
 class MusicPlayerUI extends StatefulWidget {
-  // var title;
-  // var subTitle;
-  // var songUri;
-  var songModel;
+  final List<SongModel> songModel;
   final AudioPlayer audioPlayer;
-  // var albumCoverId;
+  int songIndex;
+
   MusicPlayerUI(
-    // this.title,
-    // this.subTitle,
-    // this.songUri,
     this.songModel,
     this.audioPlayer,
-    // this.albumCoverId,
+    this.songIndex,
   );
 
   @override
@@ -36,36 +31,58 @@ class MusicPlayerUI extends StatefulWidget {
 
 class _MusicPlayerUIState extends State<MusicPlayerUI> {
   var myProvider;
+  List<AudioSource> songList = [];
+  // int songIndex = widget.songIndex;
+
   @override
   void initState() {
     super.initState();
-    playSong(widget.songModel.uri);
+    // playSong(widget.songModel.uri);
+    playSong();
   }
 
-  playSong(songUri) {
+  playSong() {
     myProvider = Provider.of<DurPosProvider>(context, listen: false);
     try {
-      widget.audioPlayer.setAudioSource(
-        AudioSource.uri(
-          Uri.parse(songUri),
-          tag: MediaItem(
-            id: 'widget.songModel.id',
-            album: widget.songModel.album,
-            title: widget.songModel.displayNameWOExt,
-            artUri: Uri.parse('https://example.com/albumart.jpg'),
+      widget.songModel.forEach((element) {
+        songList.add(
+          AudioSource.uri(
+            Uri.parse(element.uri!),
+            tag: MediaItem(
+              id: element.id.toString(),
+              album: element.album,
+              title: element.displayNameWOExt,
+              artUri: Uri.parse('https://example.com/albumart.jpg'),
+            ),
           ),
-        ),
+        );
+      });
+      widget.audioPlayer.setAudioSource(
+        ConcatenatingAudioSource(children: songList),
+        initialIndex: widget.songIndex,
       );
-      widget.audioPlayer.play();
     } on Exception {
       log("Error persing song");
     }
+    widget.audioPlayer.play();
 
     widget.audioPlayer.durationStream.listen((d) {
       myProvider.changeDurationValue(d);
     });
     widget.audioPlayer.positionStream.listen((d) {
       myProvider.changePositionValue(d);
+    });
+
+    listenToSongIndex();
+  }
+
+  void listenToSongIndex() {
+    widget.audioPlayer.currentIndexStream.listen((event) {
+      setState(() {
+        if (event != null) {
+          widget.songIndex = event;
+        }
+      });
     });
   }
 
@@ -110,7 +127,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
             child: Opacity(
               opacity: 0.3,
               child: QueryArtworkWidget(
-                id: widget.songModel.id,
+                id: widget.songModel[widget.songIndex].id,
                 type: ArtworkType.AUDIO,
                 artworkBorder: BorderRadius.circular(10),
                 artworkHeight: size.height,
@@ -130,6 +147,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Divider(color: Colors.white54),
+                  // Text("${widget.songModel}"),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -137,9 +155,13 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
                         headerPic(
                           size: size,
                           albumCover: albumCover,
-                          albumCoverId: widget.songModel.id,
+                          albumCoverId: widget.songModel[widget.songIndex].id,
                         ),
-                        songTitle(size: size, songModel: widget.songModel),
+                        songTitle(
+                          size: size,
+                          songModel: widget.songModel,
+                          songIndex: widget.songIndex,
+                        ),
                         musicTimer(size: size, audioPlayer: widget.audioPlayer),
                         PlayIcons(widget.songModel, widget.audioPlayer),
                       ],

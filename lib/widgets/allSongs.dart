@@ -14,11 +14,8 @@ class AllSongs extends StatelessWidget {
   bool isFav;
   bool isBtmSheet;
   var songModel;
-  // var title;
-  // var subTitle;
-  // var songUri;
-  // var albumCoverId;
   final AudioPlayer audioPlayer;
+  int songIndex;
 
   AllSongs(
     this.clr,
@@ -28,16 +25,13 @@ class AllSongs extends StatelessWidget {
     this.isFav,
     this.isBtmSheet,
     this.songModel,
-    // this.title,
-    // this.subTitle,
-    // this.songUri,
     this.audioPlayer,
-    // this.albumCoverId,
+    this.songIndex,
   );
 
   @override
   Widget build(BuildContext context) {
-    String songArtist = songModel.artist.toString();
+    String songArtist = songModel[songIndex].artist.toString();
     if (songArtist == "<unknown>") {
       songArtist = "Unknown Artist";
     }
@@ -48,7 +42,7 @@ class AllSongs extends StatelessWidget {
         builder: (context, playPause, child) {
           return ListTile(
             leading: QueryArtworkWidget(
-              id: songModel.id,
+              id: songModel[songIndex].id,
               type: ArtworkType.AUDIO,
               artworkBorder: BorderRadius.circular(10),
               artworkHeight: 45,
@@ -60,12 +54,12 @@ class AllSongs extends StatelessWidget {
               ),
             ),
             title: Text(
-              "${songModel.displayNameWOExt}",
+              "${songModel[songIndex].displayNameWOExt}",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: txtClr),
             ),
             subtitle: Text(
-              "$songArtist / ${songModel.album}",
+              "$songArtist / ${songModel[songIndex].album}",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: txtClr.withOpacity(0.5)),
             ),
@@ -130,7 +124,11 @@ class AllSongs extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MusicPlayerUI(songModel, audioPlayer),
+                    builder: (context) => MusicPlayerUI(
+                      songModel,
+                      audioPlayer,
+                      songIndex,
+                    ),
                   ),
                 );
               } else {
@@ -138,7 +136,11 @@ class AllSongs extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MusicPlayerUI(songModel, audioPlayer),
+                    builder: (context) => MusicPlayerUI(
+                      songModel,
+                      audioPlayer,
+                      songIndex,
+                    ),
                   ),
                 );
               }
