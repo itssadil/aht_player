@@ -6,6 +6,7 @@ import 'package:ahtplayer/providers/isSuffleProvider.dart';
 import 'package:ahtplayer/providers/musicPlayerTitleProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:ahtplayer/providers/timerVisibleProvider.dart';
+import 'package:ahtplayer/providers/volumeSetProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => IsSongShuffle()),
         ChangeNotifierProvider(create: (_) => MusicPlayerTitle()),
         ChangeNotifierProvider(create: (_) => TimerVisible()),
+        ChangeNotifierProvider(create: (_) => VolumeSet()),
       ],
       child: MyApp(),
     ),
