@@ -11,7 +11,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import 'subpages/bottomSheetSongs.dart';
+import 'subpages/footerSongs.dart';
 import 'subpages/headerPic.dart';
 import 'subpages/musicTimer.dart';
 import 'subpages/playIcons.dart';
@@ -42,14 +42,15 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
   List<AudioSource> songList = [];
   bool isSelectTime = false;
 
-  // int songIndex = widget.songIndex;
-
   @override
   void initState() {
     super.initState();
-    // playSong(widget.songModel.uri);
     playSong();
   }
+
+  /*====================================================================
+                            Audio Playing Function
+  ====================================================================*/
 
   playSong() {
     myProvider = Provider.of<DurPosProvider>(context, listen: false);
@@ -97,6 +98,10 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
       });
     });
   }
+
+  /*====================================================================
+                           Sleeping Timer Function
+  ====================================================================*/
 
   TimeOfDay selectedTime = TimeOfDay.now();
   String appTitle = "AHT Player";
@@ -176,12 +181,15 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final String albumCover = "assets/img/albumCover.jpg";
+
     return Scaffold(
       backgroundColor: Color(0xff001BF6),
       appBar: AppBar(
-        // title: title(appTitle: appTitle),
         title: Consumer<MusicPlayerTitle>(
-            builder: (context, value, child) => Text(value.appTitle)),
+          builder: (context, value, child) {
+            return Text(value.appTitle);
+          },
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -257,7 +265,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
                       ],
                     ),
                   ),
-                  allBtmSongs(),
+                  footerSongs(widget.audioPlayer),
                 ],
               ),
             ),

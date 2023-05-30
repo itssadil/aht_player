@@ -2,9 +2,9 @@ import 'package:ahtplayer/widgets/musicList.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
-class allBtmSongs extends StatelessWidget {
-  allBtmSongs({Key? key}) : super(key: key);
-  final AudioPlayer _audioPlayer = new AudioPlayer();
+class footerSongs extends StatelessWidget {
+  final AudioPlayer audioPlayer;
+  footerSongs(this.audioPlayer);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,7 +33,7 @@ class allBtmSongs extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return MusicList(Color(0xff001BF6).withOpacity(0.5), 0, Colors.white,
-            true, _audioPlayer);
+            true, audioPlayer);
       },
     );
   }
