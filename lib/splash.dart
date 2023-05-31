@@ -1,8 +1,11 @@
 import 'dart:async';
 
-import 'package:ahtplayer/pages/homePage/homPage.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'pages/homePage/homPage.dart';
+import 'pages/permissionChecker.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -15,14 +18,37 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
+
+    requestPermission();
+  }
+
+  void requestPermission() async {
+    PermissionStatus status = await Permission.storage.status;
+    if (status.isGranted) {
+      Timer(
+        Duration(seconds: 2),
+        () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        },
       );
-    });
+    } else {
+      Timer(
+        Duration(seconds: 2),
+        () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PermissionChecker(),
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override

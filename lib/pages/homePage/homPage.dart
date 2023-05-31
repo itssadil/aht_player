@@ -3,7 +3,6 @@ import 'package:ahtplayer/providers/isSearchVisibleProvider.dart';
 import 'package:ahtplayer/widgets/title.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'subPages/favorite.dart';
@@ -24,11 +23,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    requestPermission();
-  }
-
-  void requestPermission() async {
-    Permission.storage.request();
   }
 
   @override
