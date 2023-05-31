@@ -1,5 +1,7 @@
+import 'package:ahtplayer/providers/allSongsListProvider.dart';
 import 'package:ahtplayer/providers/durPosProvider.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
+import 'package:ahtplayer/providers/footerPlayingProvider.dart';
 import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/isLoopingProvider.dart';
 import 'package:ahtplayer/providers/isSuffleProvider.dart';
@@ -35,6 +37,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => MusicPlayerTitle()),
         ChangeNotifierProvider(create: (_) => TimerVisible()),
         ChangeNotifierProvider(create: (_) => VolumeSet()),
+        ChangeNotifierProvider(create: (_) => FooterPlayingProvider()),
+        ChangeNotifierProvider(create: (_) => AllSongsList()),
       ],
       child: MyApp(),
     ),

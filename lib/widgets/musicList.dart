@@ -1,3 +1,4 @@
+import 'package:ahtplayer/providers/allSongsListProvider.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
 import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/widgets/allSongs.dart';
@@ -17,7 +18,8 @@ class MusicList extends StatelessWidget {
       this.clr, this.elvtion, this.txtClr, this.isBtmSheet, this.audioPlayer);
 
   final OnAudioQuery _audioQuery = new OnAudioQuery();
-  List<SongModel> allSongs = [];
+
+  // List<SongModel> allSongs = [];
 
   @override
   Widget build(BuildContext context) {
@@ -45,44 +47,21 @@ class MusicList extends StatelessWidget {
                   ),
                 );
               }
-              return Consumer<HomeProvider>(
-                builder: (context, value, child) {
-                  switch (value.homeTab) {
-                    case 1:
-                      return ListView.builder(
-                        padding: EdgeInsets.only(bottom: 75),
-                        itemCount: items.data!.length,
-                        itemBuilder: (context, index) {
-                          var songModel = items.data![index];
-                          allSongs.addAll(items.data!);
-
-                          if (favValue.favList.contains(index)) {
-                            return AllSongs(
-                              clr,
-                              elvtion,
-                              txtClr,
-                              index,
-                              false,
-                              isBtmSheet,
-                              // songModel,
-                              allSongs,
-                              audioPlayer,
-                              index,
-                            );
-                          }
-                          return Container();
-                        },
-                      );
-                    default:
-                      return ListView.builder(
-                        padding: EdgeInsets.only(bottom: 75),
-                        itemCount: items.data!.length,
-                        itemBuilder: (context, index) {
-                          var songModel = items.data![index];
-
-                          allSongs.addAll(items.data!);
-                          return favValue.favList.contains(index)
-                              ? AllSongs(
+              return Consumer<AllSongsList>(
+                builder: (context, songsList, child) {
+                  return Consumer<HomeProvider>(
+                    builder: (context, value, child) {
+                      switch (value.homeTab) {
+                        case 1:
+                          return ListView.builder(
+                            padding: EdgeInsets.only(bottom: 75),
+                            itemCount: items.data!.length,
+                            itemBuilder: (context, index) {
+                              // var songModel = items.data![index];
+                              // allSongs.addAll(items.data!);
+                              songsList.changeSongsList(items.data!);
+                              if (favValue.favList.contains(index)) {
+                                return AllSongs(
                                   clr,
                                   elvtion,
                                   txtClr,
@@ -90,25 +69,52 @@ class MusicList extends StatelessWidget {
                                   false,
                                   isBtmSheet,
                                   // songModel,
-                                  allSongs,
-                                  audioPlayer,
-                                  index,
-                                )
-                              : AllSongs(
-                                  clr,
-                                  elvtion,
-                                  txtClr,
-                                  index,
-                                  true,
-                                  isBtmSheet,
-                                  // songModel,
-                                  allSongs,
+                                  songsList.allSongs,
                                   audioPlayer,
                                   index,
                                 );
-                        },
-                      );
-                  }
+                              }
+                              return Container();
+                            },
+                          );
+                        default:
+                          return ListView.builder(
+                            padding: EdgeInsets.only(bottom: 75),
+                            itemCount: items.data!.length,
+                            itemBuilder: (context, index) {
+                              // var songModel = items.data![index];
+
+                              songsList.changeSongsList(items.data!);
+                              return favValue.favList.contains(index)
+                                  ? AllSongs(
+                                      clr,
+                                      elvtion,
+                                      txtClr,
+                                      index,
+                                      false,
+                                      isBtmSheet,
+                                      // songModel,
+                                      songsList.allSongs,
+                                      audioPlayer,
+                                      index,
+                                    )
+                                  : AllSongs(
+                                      clr,
+                                      elvtion,
+                                      txtClr,
+                                      index,
+                                      true,
+                                      isBtmSheet,
+                                      // songModel,
+                                      songsList.allSongs,
+                                      audioPlayer,
+                                      index,
+                                    );
+                            },
+                          );
+                      }
+                    },
+                  );
                 },
               );
             },

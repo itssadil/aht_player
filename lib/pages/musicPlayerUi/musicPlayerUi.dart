@@ -21,11 +21,15 @@ class MusicPlayerUI extends StatefulWidget {
   final List<SongModel> songModel;
   final AudioPlayer audioPlayer;
   int songIndex;
+  var seekTo;
+  bool isFromFooter;
 
   MusicPlayerUI(
     this.songModel,
     this.audioPlayer,
     this.songIndex,
+    this.seekTo,
+    this.isFromFooter,
   );
 
   @override
@@ -45,7 +49,12 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
   @override
   void initState() {
     super.initState();
-    playSong();
+    if (widget.isFromFooter != true) {
+      playSong();
+    } else {
+      widget.audioPlayer.play();
+      widget.audioPlayer.seek(widget.seekTo);
+    }
   }
 
   /*====================================================================
@@ -77,6 +86,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
     } on Exception {
       log("Error persing song");
     }
+    // widget.audioPlayer.pause();
     widget.audioPlayer.play();
 
     widget.audioPlayer.durationStream.listen((d) {

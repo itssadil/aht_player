@@ -1,5 +1,6 @@
 import 'package:ahtplayer/pages/musicPlayerUi/musicPlayerUi.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
+import 'package:ahtplayer/providers/footerPlayingProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -28,6 +29,8 @@ class AllSongs extends StatelessWidget {
     this.audioPlayer,
     this.songIndex,
   );
+
+  var myFooterPlayingProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +122,11 @@ class AllSongs extends StatelessWidget {
               if (playPause.playPauseIcon == Icons.play_circle) {
                 playPause.changePlayPauseIcon();
               }
+
+              myFooterPlayingProvider =
+                  Provider.of<FooterPlayingProvider>(context, listen: false);
+
+              myFooterPlayingProvider.changePlayingIndex(songIndex);
               if (isBtmSheet == true) {
                 Navigator.pop(context);
                 Navigator.pushReplacement(
@@ -128,11 +136,12 @@ class AllSongs extends StatelessWidget {
                       songModel,
                       audioPlayer,
                       songIndex,
+                      Duration(seconds: 0),
+                      false,
                     ),
                   ),
                 );
               } else {
-                // playSong(songUri);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -140,6 +149,8 @@ class AllSongs extends StatelessWidget {
                       songModel,
                       audioPlayer,
                       songIndex,
+                      Duration(seconds: 0),
+                      false,
                     ),
                   ),
                 );

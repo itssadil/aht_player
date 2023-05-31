@@ -2,10 +2,12 @@ import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/isSearchVisibleProvider.dart';
 import 'package:ahtplayer/widgets/title.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'subPages/favorite.dart';
+import 'subPages/footerPlaying.dart';
 import 'subPages/musicCat.dart';
 import 'subPages/search.dart';
 import 'subPages/songs.dart';
@@ -18,6 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final AudioPlayer _audioPlayer = new AudioPlayer();
   @override
   void initState() {
     super.initState();
@@ -74,13 +77,14 @@ class _HomePageState extends State<HomePage> {
                     case 1:
                       return Favorite();
                     default:
-                      return Songs();
+                      return Songs(_audioPlayer);
                   }
                 },
               ),
               // SizedBox(height: 20),
             ],
           ),
+          FooterPlayingSection(_audioPlayer),
         ],
       ),
     );
