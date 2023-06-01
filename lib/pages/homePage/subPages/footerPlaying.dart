@@ -38,7 +38,6 @@ class _FooterBodySectionState extends State<FooterBodySection> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     listenToSongIndex();

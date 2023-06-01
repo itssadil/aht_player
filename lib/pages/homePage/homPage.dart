@@ -1,3 +1,4 @@
+import 'package:ahtplayer/pages/playlistPage/playlist.dart';
 import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/isSearchVisibleProvider.dart';
 import 'package:ahtplayer/widgets/title.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
-import 'subPages/favorite.dart';
+import '../playlistPage/favorite.dart';
 import 'subPages/footerPlaying.dart';
 import 'subPages/musicCat.dart';
 import 'subPages/search.dart';
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: title(appTitle: 'AHT Player'),
         centerTitle: true,
@@ -70,6 +72,8 @@ class _HomePageState extends State<HomePage> {
                   switch (homeTab.homeTab) {
                     case 1:
                       return Favorite(_audioPlayer);
+                    case 2:
+                      return Playlist();
                     default:
                       return Songs(_audioPlayer);
                   }
