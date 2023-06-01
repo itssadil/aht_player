@@ -7,18 +7,17 @@ import 'package:provider/provider.dart';
 
 class PlayIcons extends StatefulWidget {
   var songModel;
+  var songIndex;
   final AudioPlayer audioPlayer;
 
-  PlayIcons(this.songModel, this.audioPlayer);
+  PlayIcons(this.songModel, this.songIndex, this.audioPlayer);
 
   @override
-  State<PlayIcons> createState() => _PlayIconsState(songModel);
+  State<PlayIcons> createState() => _PlayIconsState();
 }
 
 class _PlayIconsState extends State<PlayIcons> {
-  var songModel;
-
-  _PlayIconsState(this.songModel);
+  var footerProvider;
 
   @override
   Widget build(BuildContext context) {

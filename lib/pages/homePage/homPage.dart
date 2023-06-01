@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, homeTab, child) {
                   switch (homeTab.homeTab) {
                     case 1:
-                      return Favorite();
+                      return Favorite(_audioPlayer);
                     default:
                       return Songs(_audioPlayer);
                   }

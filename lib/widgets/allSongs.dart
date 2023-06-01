@@ -1,6 +1,5 @@
 import 'package:ahtplayer/pages/musicPlayerUi/musicPlayerUi.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
-import 'package:ahtplayer/providers/footerPlayingProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -16,7 +15,6 @@ class AllSongs extends StatelessWidget {
   bool isBtmSheet;
   var songModel;
   final AudioPlayer audioPlayer;
-  int songIndex;
 
   AllSongs(
     this.clr,
@@ -27,14 +25,13 @@ class AllSongs extends StatelessWidget {
     this.isBtmSheet,
     this.songModel,
     this.audioPlayer,
-    this.songIndex,
   );
 
   var myFooterPlayingProvider;
 
   @override
   Widget build(BuildContext context) {
-    String songArtist = songModel[songIndex].artist.toString();
+    String songArtist = songModel[index].artist.toString();
     if (songArtist == "<unknown>") {
       songArtist = "Unknown Artist";
     }
@@ -45,7 +42,7 @@ class AllSongs extends StatelessWidget {
         builder: (context, playPause, child) {
           return ListTile(
             leading: QueryArtworkWidget(
-              id: songModel[songIndex].id,
+              id: songModel[index].id,
               type: ArtworkType.AUDIO,
               artworkBorder: BorderRadius.circular(10),
               artworkHeight: 45,
@@ -57,12 +54,12 @@ class AllSongs extends StatelessWidget {
               ),
             ),
             title: Text(
-              "${songModel[songIndex].displayNameWOExt}",
+              "${songModel[index].displayNameWOExt}",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: txtClr),
             ),
             subtitle: Text(
-              "$songArtist / ${songModel[songIndex].album}",
+              "$songArtist / ${songModel[index].album}",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: txtClr.withOpacity(0.5)),
             ),
@@ -123,10 +120,6 @@ class AllSongs extends StatelessWidget {
                 playPause.changePlayPauseIcon();
               }
 
-              myFooterPlayingProvider =
-                  Provider.of<FooterPlayingProvider>(context, listen: false);
-
-              myFooterPlayingProvider.changePlayingIndex(songIndex);
               if (isBtmSheet == true) {
                 Navigator.pop(context);
                 Navigator.pushReplacement(
@@ -135,7 +128,7 @@ class AllSongs extends StatelessWidget {
                     builder: (context) => MusicPlayerUI(
                       songModel,
                       audioPlayer,
-                      songIndex,
+                      index,
                       Duration(seconds: 0),
                       false,
                     ),
@@ -148,7 +141,7 @@ class AllSongs extends StatelessWidget {
                     builder: (context) => MusicPlayerUI(
                       songModel,
                       audioPlayer,
-                      songIndex,
+                      index,
                       Duration(seconds: 0),
                       false,
                     ),

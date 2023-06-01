@@ -7,7 +7,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-class MusicList extends StatelessWidget {
+class MusicList extends StatefulWidget {
   Color clr;
   double elvtion;
   Color txtClr;
@@ -17,10 +17,32 @@ class MusicList extends StatelessWidget {
   MusicList(
       this.clr, this.elvtion, this.txtClr, this.isBtmSheet, this.audioPlayer);
 
+  @override
+  State<MusicList> createState() => _MusicListState();
+}
+
+class _MusicListState extends State<MusicList> {
   final OnAudioQuery _audioQuery = new OnAudioQuery();
 
-  // List<SongModel> allSongs = [];
+  late int count;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    songCount();
+  }
+
+  songCount() async {
+    List<SongModel> songs = await _audioQuery.querySongs();
+
+    if (songs != null) {
+      count = songs.length;
+      print(count); // Output: 10 (Example count)
+    }
+  }
+
+  // List<SongModel> allSongs = [];
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -59,19 +81,21 @@ class MusicList extends StatelessWidget {
                             itemBuilder: (context, index) {
                               // var songModel = items.data![index];
                               // allSongs.addAll(items.data!);
-                              songsList.changeSongsList(items.data!);
+
+                              if (songsList.allSongs.length != count) {
+                                songsList.changeSongsList(items.data!);
+                              }
                               if (favValue.favList.contains(index)) {
                                 return AllSongs(
-                                  clr,
-                                  elvtion,
-                                  txtClr,
+                                  widget.clr,
+                                  widget.elvtion,
+                                  widget.txtClr,
                                   index,
                                   false,
-                                  isBtmSheet,
+                                  widget.isBtmSheet,
                                   // songModel,
                                   songsList.allSongs,
-                                  audioPlayer,
-                                  index,
+                                  widget.audioPlayer,
                                 );
                               }
                               return Container();
@@ -84,31 +108,31 @@ class MusicList extends StatelessWidget {
                             itemBuilder: (context, index) {
                               // var songModel = items.data![index];
 
-                              songsList.changeSongsList(items.data!);
+                              if (songsList.allSongs.length != count) {
+                                songsList.changeSongsList(items.data!);
+                              }
                               return favValue.favList.contains(index)
                                   ? AllSongs(
-                                      clr,
-                                      elvtion,
-                                      txtClr,
+                                      widget.clr,
+                                      widget.elvtion,
+                                      widget.txtClr,
                                       index,
                                       false,
-                                      isBtmSheet,
+                                      widget.isBtmSheet,
                                       // songModel,
                                       songsList.allSongs,
-                                      audioPlayer,
-                                      index,
+                                      widget.audioPlayer,
                                     )
                                   : AllSongs(
-                                      clr,
-                                      elvtion,
-                                      txtClr,
+                                      widget.clr,
+                                      widget.elvtion,
+                                      widget.txtClr,
                                       index,
                                       true,
-                                      isBtmSheet,
+                                      widget.isBtmSheet,
                                       // songModel,
                                       songsList.allSongs,
-                                      audioPlayer,
-                                      index,
+                                      widget.audioPlayer,
                                     );
                             },
                           );

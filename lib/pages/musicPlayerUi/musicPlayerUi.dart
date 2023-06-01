@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:ahtplayer/providers/durPosProvider.dart';
+import 'package:ahtplayer/providers/footerPlayingProvider.dart';
 import 'package:ahtplayer/providers/musicPlayerTitleProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:ahtplayer/providers/timerVisibleProvider.dart';
@@ -41,6 +42,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
   var myMusicPlayerTitle;
   var myPlayPauseProvider;
   var myTimerVisibleProvider;
+  var footerProvider;
   late Timer watchTimer;
   late Duration difference;
   List<AudioSource> songList = [];
@@ -49,12 +51,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
   @override
   void initState() {
     super.initState();
-    if (widget.isFromFooter != true) {
-      playSong();
-    } else {
-      widget.audioPlayer.play();
-      widget.audioPlayer.seek(widget.seekTo);
-    }
+    playSong();
   }
 
   /*====================================================================
@@ -63,30 +60,34 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
 
   playSong() {
     myProvider = Provider.of<DurPosProvider>(context, listen: false);
+    footerProvider = Provider.of<FooterPlayingProvider>(context, listen: false);
 
-    try {
-      widget.songModel.forEach((element) {
-        songList.add(
-          AudioSource.uri(
-            Uri.parse(element.uri!),
-            tag: MediaItem(
-              id: element.id.toString(),
-              album: element.album,
-              title: element.displayNameWOExt,
-              artUri: Uri.parse(
-                  "https://raw.githubusercontent.com/itssadil/aht_player/master/photo-1680357981460-f00398bafd42.jpg"),
+    if (widget.isFromFooter != true) {
+      try {
+        widget.songModel.forEach((element) {
+          songList.add(
+            AudioSource.uri(
+              Uri.parse(element.uri!),
+              tag: MediaItem(
+                id: element.id.toString(),
+                album: element.album,
+                title: element.displayNameWOExt,
+                artUri: Uri.parse(
+                    "https://raw.githubusercontent.com/itssadil/aht_player/master/photo-1680357981460-f00398bafd42.jpg"),
+              ),
             ),
-          ),
+          );
+        });
+        widget.audioPlayer.setAudioSource(
+          ConcatenatingAudioSource(children: songList),
+          initialIndex: widget.songIndex,
         );
-      });
-      widget.audioPlayer.setAudioSource(
-        ConcatenatingAudioSource(children: songList),
-        initialIndex: widget.songIndex,
-      );
-    } on Exception {
-      log("Error persing song");
+      } on Exception {
+        log("Error persing song");
+      }
+    } else {
+      widget.audioPlayer.seek(widget.seekTo);
     }
-    // widget.audioPlayer.pause();
     widget.audioPlayer.play();
 
     widget.audioPlayer.durationStream.listen((d) {
@@ -104,6 +105,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
       setState(() {
         if (event != null) {
           widget.songIndex = event;
+          footerProvider.changePlayingIndex(event);
         }
       });
     });
@@ -271,7 +273,8 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
                           songIndex: widget.songIndex,
                         ),
                         musicTimer(size: size, audioPlayer: widget.audioPlayer),
-                        PlayIcons(widget.songModel, widget.audioPlayer),
+                        PlayIcons(widget.songModel, widget.songIndex,
+                            widget.audioPlayer),
                       ],
                     ),
                   ),

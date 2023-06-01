@@ -12,107 +12,140 @@ class FooterPlayingSection extends StatelessWidget {
 
   FooterPlayingSection(this.audioPlayer);
 
-  final OnAudioQuery _audioQuery = new OnAudioQuery();
-
   @override
   Widget build(BuildContext context) {
     return Consumer<FooterPlayingProvider>(
       builder: (context, value, child) {
-        int index = audioPlayer.currentIndex ?? 0;
-        return FutureBuilder<List<SongModel>>(
-          future: _audioQuery.querySongs(
-            sortType: null,
-            orderType: OrderType.ASC_OR_SMALLER,
-            uriType: UriType.EXTERNAL,
-            ignoreCase: true,
-          ),
-          builder: (context, items) {
-            var songModel = items.data?[index];
-            return Positioned(
-              bottom: 10,
-              right: 10,
-              left: 10,
-              child: Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Consumer<AllSongsList>(
-                  builder: (context, songsList, child) {
-                    return Consumer<PlayPause>(
-                      builder: (context, playPause, child) {
-                        return ListTile(
-                          title: Text(
-                            "${songModel?.title}",
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Text(
-                            "${songModel?.artist == "<unknown>" ? "Unknown Artist" : songModel?.artist} / ${songModel?.album}",
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: InkWell(
-                            borderRadius: BorderRadius.circular(50),
-                            onTap: () {
-                              if (audioPlayer.currentIndex == null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MusicPlayerUI(
-                                      songsList.allSongs,
-                                      audioPlayer,
-                                      index,
-                                      Duration(seconds: 0),
-                                      false,
-                                    ),
-                                  ),
-                                );
-                              }
-                              if (playPause.playPauseIcon !=
-                                  Icons.play_circle) {
-                                audioPlayer.stop();
-                              } else {
-                                audioPlayer.play();
-                              }
-                              playPause.changePlayPauseIcon();
-                              // print(audioPlayer.position);
-                            },
-                            child: Icon(
-                              playPause.playPauseIcon,
-                              size: 50,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          onTap: () {
-                            if (playPause.playPauseIcon == Icons.play_circle) {
-                              playPause.changePlayPauseIcon();
-                            }
+        int songIndex = value.defaultIndex;
+        return FooterBodySection(songIndex, audioPlayer);
+      },
+    );
+    // return Container();
+  }
+}
+
+class FooterBodySection extends StatefulWidget {
+  int songIndex;
+  final AudioPlayer audioPlayer;
+  FooterBodySection(this.songIndex, this.audioPlayer);
+
+  @override
+  State<FooterBodySection> createState() => _FooterBodySectionState();
+}
+
+class _FooterBodySectionState extends State<FooterBodySection> {
+  final OnAudioQuery _audioQuery = new OnAudioQuery();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    listenToSongIndex();
+  }
+
+  void listenToSongIndex() {
+    widget.audioPlayer.currentIndexStream.listen((event) {
+      setState(() {
+        if (event != null) {
+          widget.songIndex = event;
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<SongModel>>(
+      future: _audioQuery.querySongs(
+        sortType: null,
+        orderType: OrderType.ASC_OR_SMALLER,
+        uriType: UriType.EXTERNAL,
+        ignoreCase: true,
+      ),
+      builder: (context, items) {
+        var songModel = items.data?[widget.songIndex];
+        return Positioned(
+          bottom: 10,
+          right: 10,
+          left: 10,
+          child: Card(
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Consumer<AllSongsList>(
+              builder: (context, songsList, child) {
+                return Consumer<PlayPause>(
+                  builder: (context, playPause, child) {
+                    return ListTile(
+                      title: Text(
+                        "${songModel?.title}",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        "${songModel?.artist == "<unknown>" ? "Unknown Artist" : songModel?.artist} / ${songModel?.album}",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: () {
+                          if (widget.audioPlayer.currentIndex == null) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MusicPlayerUI(
                                   songsList.allSongs,
-                                  audioPlayer,
-                                  index,
-                                  audioPlayer.position,
-                                  audioPlayer.currentIndex != null
-                                      ? true
-                                      : false,
-                                  // Duration(minutes: 1, seconds: 11),
+                                  widget.audioPlayer,
+                                  widget.songIndex,
+                                  Duration(seconds: 0),
+                                  false,
                                 ),
                               ),
                             );
-                          },
+                          }
+                          if (playPause.playPauseIcon != Icons.play_circle) {
+                            widget.audioPlayer.stop();
+                          } else {
+                            widget.audioPlayer.play();
+                          }
+                          playPause.changePlayPauseIcon();
+                          // print(audioPlayer.position);
+                        },
+                        child: Icon(
+                          playPause.playPauseIcon,
+                          size: 50,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      onTap: () {
+                        if (playPause.playPauseIcon == Icons.play_circle) {
+                          playPause.changePlayPauseIcon();
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MusicPlayerUI(
+                              songsList.allSongs,
+                              widget.audioPlayer,
+                              widget.songIndex,
+                              widget.audioPlayer.position,
+                              widget.audioPlayer.currentIndex != null
+                                  ? true
+                                  : false,
+                              // Duration(minutes: 1, seconds: 11),
+                            ),
+                          ),
                         );
                       },
                     );
                   },
-                ),
-              ),
-            );
-          },
+                );
+              },
+            ),
+          ),
         );
       },
     );
-    // return Container();
   }
 }
