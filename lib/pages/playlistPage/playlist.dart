@@ -1,8 +1,12 @@
+import 'package:ahtplayer/pages/playlistPage/subpages/playlistSongs.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class Playlist extends StatefulWidget {
-  Playlist({Key? key}) : super(key: key);
+  final AudioPlayer audioPlayer;
+
+  Playlist(this.audioPlayer);
 
   @override
   State<Playlist> createState() => _PlaylistState();
@@ -122,7 +126,7 @@ class _PlaylistState extends State<Playlist> {
               final playlist = playlists[index];
               return ListTile(
                 leading: Icon(Icons.queue_music),
-                title: Text(playlist.playlist),
+                title: Text("${playlist.playlist} (${playlist.numOfSongs})"),
                 trailing: PopupMenuButton(
                   icon: Icon(Icons.more_vert, color: Colors.teal),
                   itemBuilder: (context) => [
@@ -141,7 +145,13 @@ class _PlaylistState extends State<Playlist> {
                   ],
                 ),
                 onTap: () {
-                  // Handle playlist selection
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          PlaylistSongs(playlist, widget.audioPlayer),
+                    ),
+                  );
                 },
               );
             },

@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                     case 1:
                       return Favorite(_audioPlayer);
                     case 2:
-                      return Playlist();
+                      return Playlist(_audioPlayer);
                     default:
                       return Songs(_audioPlayer);
                   }

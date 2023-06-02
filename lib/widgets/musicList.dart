@@ -56,63 +56,27 @@ class _MusicListState extends State<MusicList> {
               ignoreCase: true,
             ),
             builder: (context, items) {
-              if (items.data == null) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (items.data!.isEmpty) {
-                return Center(
-                  child: Text(
-                    "No Songs Found",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                );
-              }
-              return Consumer<AllSongsList>(
-                builder: (context, songsList, child) {
-                  return Consumer<HomeProvider>(
-                    builder: (context, value, child) {
-                      switch (value.homeTab) {
-                        case 1:
-                          return ListView.builder(
-                            padding: EdgeInsets.only(bottom: 75),
-                            itemCount: items.data!.length,
-                            itemBuilder: (context, index) {
-                              // var songModel = items.data![index];
-                              // allSongs.addAll(items.data!);
+              var item = items.data;
+              if (item != null) {
+                if (items.hasData) {
+                  return Consumer<AllSongsList>(
+                    builder: (context, songsList, child) {
+                      return Consumer<HomeProvider>(
+                        builder: (context, value, child) {
+                          switch (value.homeTab) {
+                            case 1:
+                              return ListView.builder(
+                                padding: EdgeInsets.only(bottom: 75),
+                                itemCount: items.data!.length,
+                                itemBuilder: (context, index) {
+                                  // var songModel = items.data![index];
+                                  // allSongs.addAll(items.data!);
 
-                              if (songsList.allSongs.length != count) {
-                                songsList.changeSongsList(items.data!);
-                              }
-                              if (favValue.favList.contains(index)) {
-                                return AllSongs(
-                                  widget.clr,
-                                  widget.elvtion,
-                                  widget.txtClr,
-                                  index,
-                                  false,
-                                  widget.isBtmSheet,
-                                  // songModel,
-                                  songsList.allSongs,
-                                  widget.audioPlayer,
-                                );
-                              }
-                              return Container();
-                            },
-                          );
-                        default:
-                          return ListView.builder(
-                            padding: EdgeInsets.only(bottom: 75),
-                            itemCount: items.data!.length,
-                            itemBuilder: (context, index) {
-                              // var songModel = items.data![index];
-
-                              if (songsList.allSongs.length != count) {
-                                songsList.changeSongsList(items.data!);
-                              }
-                              return favValue.favList.contains(index)
-                                  ? AllSongs(
+                                  if (songsList.allSongs.length != count) {
+                                    songsList.changeSongsList(items.data!);
+                                  }
+                                  if (favValue.favList.contains(index)) {
+                                    return AllSongs(
                                       widget.clr,
                                       widget.elvtion,
                                       widget.txtClr,
@@ -122,24 +86,63 @@ class _MusicListState extends State<MusicList> {
                                       // songModel,
                                       songsList.allSongs,
                                       widget.audioPlayer,
-                                    )
-                                  : AllSongs(
-                                      widget.clr,
-                                      widget.elvtion,
-                                      widget.txtClr,
-                                      index,
-                                      true,
-                                      widget.isBtmSheet,
-                                      // songModel,
-                                      songsList.allSongs,
-                                      widget.audioPlayer,
                                     );
-                            },
-                          );
-                      }
+                                  }
+                                  return Container();
+                                },
+                              );
+                            default:
+                              return ListView.builder(
+                                padding: EdgeInsets.only(bottom: 75),
+                                itemCount: items.data!.length,
+                                itemBuilder: (context, index) {
+                                  // var songModel = items.data![index];
+
+                                  if (songsList.allSongs.length != count) {
+                                    songsList.changeSongsList(items.data!);
+                                  }
+                                  return favValue.favList.contains(index)
+                                      ? AllSongs(
+                                          widget.clr,
+                                          widget.elvtion,
+                                          widget.txtClr,
+                                          index,
+                                          false,
+                                          widget.isBtmSheet,
+                                          // songModel,
+                                          songsList.allSongs,
+                                          widget.audioPlayer,
+                                        )
+                                      : AllSongs(
+                                          widget.clr,
+                                          widget.elvtion,
+                                          widget.txtClr,
+                                          index,
+                                          true,
+                                          widget.isBtmSheet,
+                                          // songModel,
+                                          songsList.allSongs,
+                                          widget.audioPlayer,
+                                        );
+                                },
+                              );
+                          }
+                        },
+                      );
                     },
                   );
-                },
+                }
+                if (item.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No Songs Found",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  );
+                }
+              }
+              return Center(
+                child: CircularProgressIndicator(),
               );
             },
           );

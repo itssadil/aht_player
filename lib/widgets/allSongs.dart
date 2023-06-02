@@ -29,6 +29,75 @@ class AllSongs extends StatelessWidget {
 
   var myFooterPlayingProvider;
 
+  final OnAudioQuery audioQuery = OnAudioQuery();
+  String? playlistName;
+
+  addPlaylistDialog(context, songModel) async {
+    final updatedPlaylists = await audioQuery.queryPlaylists();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("Playlist Name"),
+                      suffixIcon: ElevatedButton(
+                        onPressed: () {},
+                        child: Icon(Icons.add),
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      playlistName = value;
+                    },
+                  ),
+                ),
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: updatedPlaylists.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 3,
+                      child: ListTile(
+                        leading: Icon(Icons.queue_music),
+                        title: Text(updatedPlaylists[index].playlist),
+                        trailing: Icon(Icons.add_box),
+                        onTap: () => addSongToPlaylist(
+                          songModel,
+                          updatedPlaylists[index],
+                          context,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> addSongToPlaylist(
+      SongModel song, PlaylistModel playlist, context) async {
+    await audioQuery.addToPlaylist(playlist.id, song.id);
+    print(
+        "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk ${playlist.id} ${song.id}");
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     String songArtist = songModel[index].artist.toString();
@@ -100,9 +169,7 @@ class AllSongs extends StatelessWidget {
                             ),
                           ),
                     PopupMenuItem(
-                      onTap: () {
-                        // stopPlay(songUri);
-                      },
+                      onTap: () => addPlaylistDialog(context, songModel[index]),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
