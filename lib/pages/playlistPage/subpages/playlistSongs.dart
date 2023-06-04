@@ -1,6 +1,5 @@
 import 'package:ahtplayer/providers/allSongsListProvider.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
-import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/visiblePlaylistSongsProvider.dart';
 import 'package:ahtplayer/widgets/allSongs.dart';
 import 'package:flutter/material.dart';
@@ -104,52 +103,47 @@ class _PlaylistSongsState extends State<PlaylistSongs> {
                     if (items.hasData) {
                       return Consumer<AllSongsList>(
                         builder: (context, songsList, child) {
-                          return Consumer<HomeProvider>(
-                            builder: (context, value, child) {
-                              songsList.allSongs.clear();
-                              print(widget.playlists);
-                              playListSongData.clear();
-                              return ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                padding: EdgeInsets.only(bottom: 100),
-                                itemCount: items.data!.length,
-                                itemBuilder: (context, index) {
-                                  if (playListSongData.length !=
-                                      playListSongs.length) {
-                                    playListSongData
-                                        .add(playListSongs[index].title);
+                          songsList.allSongs.clear();
+                          print(widget.playlists);
+                          playListSongData.clear();
+                          return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.only(bottom: 100),
+                            itemCount: items.data!.length,
+                            itemBuilder: (context, index) {
+                              if (playListSongData.length !=
+                                  playListSongs.length) {
+                                playListSongData
+                                    .add(playListSongs[index].title);
 
-                                    items.data!.forEach((element) {
-                                      if (element.title.contains(
-                                          playListSongs[index].title)) {
-                                        songsList
-                                            .changeSongsListPlaylist(element);
-                                      }
-                                    });
-                                    if ((playListSongData.contains(
-                                        songsList.allSongs[index].title))) {
-                                      print(
-                                          "${playListSongs[index].id} ${playListSongs[index].title}");
-                                      return AllSongs(
-                                        clr,
-                                        elvtion,
-                                        txtClr,
-                                        index,
-                                        false,
-                                        true,
-                                        widget.playlists,
-                                        playListSongs[index].id,
-                                        isBtmSheet,
-                                        songsList.allSongs,
-                                        widget.audioPlayer,
-                                      );
-                                    }
+                                items.data!.forEach((element) {
+                                  if (element.title
+                                      .contains(playListSongs[index].title)) {
+                                    songsList.changeSongsListPlaylist(element);
                                   }
+                                });
+                                if ((playListSongData.contains(
+                                    songsList.allSongs[index].title))) {
+                                  print(
+                                      "${playListSongs[index].id} ${playListSongs[index].title}");
+                                  return AllSongs(
+                                    clr,
+                                    elvtion,
+                                    txtClr,
+                                    index,
+                                    false,
+                                    true,
+                                    widget.playlists,
+                                    playListSongs[index].id,
+                                    isBtmSheet,
+                                    songsList.allSongs,
+                                    widget.audioPlayer,
+                                  );
+                                }
+                              }
 
-                                  return Container();
-                                },
-                              );
+                              return Container();
                             },
                           );
                         },

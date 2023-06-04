@@ -1,6 +1,5 @@
 import 'package:ahtplayer/providers/allSongsListProvider.dart';
 import 'package:ahtplayer/providers/favoriteProvider.dart';
-import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/widgets/allSongs.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -80,47 +79,43 @@ class _MusicListState extends State<MusicList> {
                 if (items.hasData) {
                   return Consumer<AllSongsList>(
                     builder: (context, songsList, child) {
-                      return Consumer<HomeProvider>(
-                        builder: (context, value, child) {
-                          songsList.allSongs.clear();
-                          return ListView.builder(
-                            padding: EdgeInsets.only(bottom: 75),
-                            itemCount: items.data!.length,
-                            itemBuilder: (context, index) {
-                              // var songModel = items.data![index];
+                      songsList.allSongs.clear();
+                      return ListView.builder(
+                        padding: EdgeInsets.only(bottom: 75),
+                        itemCount: items.data!.length,
+                        itemBuilder: (context, index) {
+                          // var songModel = items.data![index];
 
-                              if (songsList.allSongs.length != count) {
-                                songsList.changeSongsList(items.data!);
-                              }
-                              return favValue.favList.contains(index)
-                                  ? AllSongs(
-                                      widget.clr,
-                                      widget.elvtion,
-                                      widget.txtClr,
-                                      index,
-                                      false,
-                                      false,
-                                      0,
-                                      0,
-                                      widget.isBtmSheet,
-                                      songsList.allSongs,
-                                      widget.audioPlayer,
-                                    )
-                                  : AllSongs(
-                                      widget.clr,
-                                      widget.elvtion,
-                                      widget.txtClr,
-                                      index,
-                                      true,
-                                      false,
-                                      0,
-                                      0,
-                                      widget.isBtmSheet,
-                                      songsList.allSongs,
-                                      widget.audioPlayer,
-                                    );
-                            },
-                          );
+                          if (songsList.allSongs.length != count) {
+                            songsList.changeSongsList(items.data!);
+                          }
+                          return favValue.favList.contains(index)
+                              ? AllSongs(
+                                  widget.clr,
+                                  widget.elvtion,
+                                  widget.txtClr,
+                                  index,
+                                  false,
+                                  false,
+                                  0,
+                                  0,
+                                  widget.isBtmSheet,
+                                  songsList.allSongs,
+                                  widget.audioPlayer,
+                                )
+                              : AllSongs(
+                                  widget.clr,
+                                  widget.elvtion,
+                                  widget.txtClr,
+                                  index,
+                                  true,
+                                  false,
+                                  0,
+                                  0,
+                                  widget.isBtmSheet,
+                                  songsList.allSongs,
+                                  widget.audioPlayer,
+                                );
                         },
                       );
                     },

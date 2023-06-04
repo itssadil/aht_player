@@ -1,5 +1,4 @@
 import 'package:ahtplayer/pages/playlistPage/subpages/playlistSongs.dart';
-import 'package:ahtplayer/providers/homeProvider.dart';
 import 'package:ahtplayer/providers/visiblePlaylistSongsProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -128,45 +127,41 @@ class _PlaylistState extends State<Playlist> {
               ),
               Visibility(
                 visible: !isVisible.isVisible,
-                child: Consumer<HomeProvider>(
-                  builder: (context, homeTab, child) {
-                    return Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: playlists.length,
-                        itemBuilder: (context, index) {
-                          final playlist = playlists[index];
-                          return ListTile(
-                            leading: Icon(Icons.queue_music),
-                            title: Text(
-                                "${playlist.playlist == "j~{UB;q4{['#j[S7'g" ? "Favorite" : playlist.playlist} (${playlist.numOfSongs})"),
-                            trailing: PopupMenuButton(
-                              icon: Icon(Icons.more_vert, color: Colors.teal),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  onTap: () {
-                                    removePlaylist(playlist);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Remove"),
-                                      Icon(Icons.cancel_outlined),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                child: Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: playlists.length,
+                    itemBuilder: (context, index) {
+                      final playlist = playlists[index];
+                      return ListTile(
+                        leading: Icon(Icons.queue_music),
+                        title: Text(
+                            "${playlist.playlist == "j~{UB;q4{['#j[S7'g" ? "Favorite" : playlist.playlist} (${playlist.numOfSongs})"),
+                        trailing: PopupMenuButton(
+                          icon: Icon(Icons.more_vert, color: Colors.teal),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              onTap: () {
+                                removePlaylist(playlist);
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Remove"),
+                                  Icon(Icons.cancel_outlined),
+                                ],
+                              ),
                             ),
-                            onTap: () {
-                              isVisible.changeVisibleOption(
-                                  playlist.id, playlist.playlist);
-                            },
-                          );
+                          ],
+                        ),
+                        onTap: () {
+                          isVisible.changeVisibleOption(
+                              playlist.id, playlist.playlist);
                         },
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
               Visibility(

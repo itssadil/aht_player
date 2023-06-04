@@ -56,6 +56,8 @@ class SearchPage extends StatelessWidget {
                           child: Consumer<AllSongsList>(
                             builder: (context, allSongs, child) {
                               return ListView.builder(
+                                keyboardDismissBehavior:
+                                    ScrollViewKeyboardDismissBehavior.onDrag,
                                 itemCount: songValue.songInfo.length,
                                 itemBuilder: (context, index) {
                                   return Card(

@@ -195,9 +195,8 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
     Size size = MediaQuery.of(context).size;
     final String albumCover = "assets/img/albumCover.jpg";
 
-    // print(
-    //     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${widget.songModel[widget.songIndex].id}");
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff001BF6),
       appBar: AppBar(
         title: Consumer<MusicPlayerTitle>(

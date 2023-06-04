@@ -28,49 +28,52 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: title(appTitle: 'AHT Player'),
-        centerTitle: true,
-        foregroundColor: Colors.lightBlue,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchPage(_audioPlayer),
-                  ));
-            },
-            icon: Icon(Icons.search),
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              MusicCat(),
-              Consumer<HomeProvider>(
-                builder: (context, homeTab, child) {
-                  switch (homeTab.homeTab) {
-                    case 1:
-                      return Favorite(_audioPlayer);
-                    case 2:
-                      return Playlist(_audioPlayer);
-                    default:
-                      return Songs(_audioPlayer);
-                  }
-                },
-              ),
-              // SizedBox(height: 20),
-            ],
-          ),
-          FooterPlayingSection(_audioPlayer),
-        ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: title(appTitle: 'AHT Player'),
+          centerTitle: true,
+          foregroundColor: Colors.lightBlue,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchPage(_audioPlayer),
+                    ));
+              },
+              icon: Icon(Icons.search),
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                MusicCat(),
+                Consumer<HomeProvider>(
+                  builder: (context, homeTab, child) {
+                    switch (homeTab.homeTab) {
+                      case 1:
+                        return Favorite(_audioPlayer);
+                      case 2:
+                        return Playlist(_audioPlayer);
+                      default:
+                        return Songs(_audioPlayer);
+                    }
+                  },
+                ),
+                // SizedBox(height: 20),
+              ],
+            ),
+            FooterPlayingSection(_audioPlayer),
+          ],
+        ),
       ),
     );
   }
