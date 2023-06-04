@@ -12,6 +12,7 @@ class SearchPage extends StatelessWidget {
   SearchPage(this.audioPlayer);
 
   List<SongModel> searchSongsList = [];
+  int newSongIndex = 0;
 
   Future<void> getSongInfo(newV, context) async {
     OnAudioQuery onAudioQuery = OnAudioQuery();
@@ -76,18 +77,17 @@ class SearchPage extends StatelessWidget {
                                           if (element.title ==
                                               songValue.songInfo[index]
                                                   ["title"]) {
-                                            searchSongsList.add(element);
-                                            searchSongsList
-                                                .addAll(allSongs.allSongs);
+                                            newSongIndex = allSongs.allSongs
+                                                .indexOf(element);
                                           }
                                         });
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => MusicPlayerUI(
-                                              searchSongsList,
+                                              allSongs.allSongs,
                                               audioPlayer,
-                                              0,
+                                              newSongIndex,
                                               Duration(seconds: 0),
                                               false,
                                             ),
