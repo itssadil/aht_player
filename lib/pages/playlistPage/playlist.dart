@@ -1,7 +1,10 @@
 import 'package:ahtplayer/pages/playlistPage/subpages/playlistSongs.dart';
+import 'package:ahtplayer/providers/homeProvider.dart';
+import 'package:ahtplayer/providers/visiblePlaylistSongsProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 class Playlist extends StatefulWidget {
   final AudioPlayer audioPlayer;
@@ -82,8 +85,6 @@ class _PlaylistState extends State<Playlist> {
   }
 
   Future<void> createPlaylist() async {
-    // final songs = await audioQuery.querySongs();
-
     await audioQuery.createPlaylist(
       playlistName,
     );
@@ -104,8 +105,6 @@ class _PlaylistState extends State<Playlist> {
 ============================================================*/
 
   Future<void> showPlayList() async {
-    // final songs = await audioQuery.querySongs();
-
     final updatedPlaylists = await audioQuery.queryPlaylists();
     setState(() {
       playlists = updatedPlaylists;
@@ -114,68 +113,90 @@ class _PlaylistState extends State<Playlist> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 20),
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: playlists.length,
-            itemBuilder: (context, index) {
-              final playlist = playlists[index];
-              return ListTile(
-                leading: Icon(Icons.queue_music),
-                title: Text("${playlist.playlist} (${playlist.numOfSongs})"),
-                trailing: PopupMenuButton(
-                  icon: Icon(Icons.more_vert, color: Colors.teal),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      onTap: () {
-                        removePlaylist(playlist);
+    return Expanded(
+      child: Consumer<VisiblePlaylistSongs>(
+        builder: (context, isVisible, child) {
+          return Stack(
+            children: [
+              Visibility(
+                visible: isVisible.isVisible,
+                child: PlaylistSongs(
+                  widget.audioPlayer,
+                  isVisible.playListId,
+                  isVisible.playListName,
+                ),
+              ),
+              Visibility(
+                visible: !isVisible.isVisible,
+                child: Consumer<HomeProvider>(
+                  builder: (context, homeTab, child) {
+                    return Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: playlists.length,
+                        itemBuilder: (context, index) {
+                          final playlist = playlists[index];
+                          return ListTile(
+                            leading: Icon(Icons.queue_music),
+                            title: Text(
+                                "${playlist.playlist == "j~{UB;q4{['#j[S7'g" ? "Favorite" : playlist.playlist} (${playlist.numOfSongs})"),
+                            trailing: PopupMenuButton(
+                              icon: Icon(Icons.more_vert, color: Colors.teal),
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  onTap: () {
+                                    removePlaylist(playlist);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Remove"),
+                                      Icon(Icons.cancel_outlined),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              isVisible.changeVisibleOption(
+                                  playlist.id, playlist.playlist);
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Visibility(
+                visible: !isVisible.isVisible,
+                child: Positioned(
+                  bottom: 100,
+                  right: 10,
+                  child: Visibility(
+                    visible: true,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        createPlaylistSheet();
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Remove"),
-                          Icon(Icons.cancel_outlined),
-                        ],
+                      child: Icon(
+                        Icons.add,
+                        size: 30,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding: EdgeInsets.all(10),
+                        backgroundColor: Colors.green,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          PlaylistSongs(playlist, widget.audioPlayer),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ),
-        Positioned(
-          bottom: 40,
-          right: 10,
-          child: ElevatedButton(
-            onPressed: () {
-              createPlaylistSheet();
-            },
-            child: Icon(
-              Icons.add,
-              size: 30,
-            ),
-            style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(10),
-              backgroundColor: Colors.green,
-            ),
-          ),
-        ),
-      ],
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

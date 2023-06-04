@@ -15,6 +15,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/isSearchVisibleProvider.dart';
+import 'providers/visiblePlaylistSongsProvider.dart';
 import 'splash.dart';
 
 Future<void> main() async {
@@ -41,6 +42,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => FooterPlayingProvider()),
         ChangeNotifierProvider(create: (_) => AllSongsList()),
         ChangeNotifierProvider(create: (_) => VisibleRefreshProvider()),
+        ChangeNotifierProvider(create: (_) => VisiblePlaylistSongs()),
       ],
       child: MyApp(),
     ),
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AHT Player',
+
+      // home: SearchPage(),
       home: Splash(),
     );
   }

@@ -1,105 +1,173 @@
-import 'package:ahtplayer/pages/musicPlayerUi/musicPlayerUi.dart';
-import 'package:ahtplayer/providers/playPauseProvider.dart';
-import 'package:ahtplayer/widgets/title.dart';
+import 'package:ahtplayer/providers/allSongsListProvider.dart';
+import 'package:ahtplayer/providers/favoriteProvider.dart';
+import 'package:ahtplayer/providers/homeProvider.dart';
+import 'package:ahtplayer/providers/visiblePlaylistSongsProvider.dart';
+import 'package:ahtplayer/widgets/allSongs.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-class PlaylistSongs extends StatelessWidget {
-  final PlaylistModel playlist;
+class PlaylistSongs extends StatefulWidget {
   final AudioPlayer audioPlayer;
+  var playlists;
+  String playName;
 
-  PlaylistSongs(this.playlist, this.audioPlayer);
+  PlaylistSongs(
+    this.audioPlayer,
+    this.playlists,
+    this.playName,
+  );
 
-  OnAudioQuery audioQuery = OnAudioQuery();
+  @override
+  State<PlaylistSongs> createState() => _PlaylistSongsState();
+}
 
-  Future<List<SongModel>> fetchPlaylistSongs(fatchList) async {
-    return await audioQuery.queryAudiosFrom(
-      AudiosFromType.PLAYLIST,
-      fatchList.id,
-    );
+class _PlaylistSongsState extends State<PlaylistSongs> {
+  final OnAudioQuery _audioQuery = new OnAudioQuery();
+
+  Color clr = Colors.tealAccent;
+  double elvtion = 2;
+  Color txtClr = Colors.black;
+  bool isBtmSheet = false;
+  bool isFromPlaylist = false;
+
+  late int count;
+  List<SongModel> playListSongs = [];
+  List playListSongData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    songCount();
+    playListSongsList();
+  }
+
+  Future<void> playListSongsList() async {
+    playListSongs = await _audioQuery.queryAudiosFrom(
+        AudiosFromType.PLAYLIST, widget.playlists);
+  }
+
+  songCount() async {
+    List<SongModel> songs = await _audioQuery.querySongs();
+
+    if (songs != null) {
+      count = songs.length;
+      print("Total Songs: $count");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: title(appTitle: playlist.playlist),
-      ),
-      body: FutureBuilder<List<SongModel>>(
-        future: fetchPlaylistSongs(playlist),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final songs = snapshot.data;
-
-            return Consumer<PlayPause>(
-              builder: (context, playPause, child) {
-                return ListView.builder(
-                  itemCount: songs!.length,
-                  itemBuilder: (context, index) {
-                    final song = songs[index];
-
-                    String songArtist = song.artist.toString();
-                    if (songArtist == "<unknown>") {
-                      songArtist = "Unknown Artist";
-                    }
-
-                    // print(
-                    //     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${song.id} ${song.data}");
-                    return ListTile(
-                      leading: QueryArtworkWidget(
-                        id: song.id,
-                        type: ArtworkType.AUDIO,
-                        artworkBorder: BorderRadius.circular(10),
-                        artworkHeight: 45,
-                        artworkWidth: 50,
-                        nullArtworkWidget: Icon(
-                          Icons.image,
-                          size: 45,
-                          color: Colors.teal.withOpacity(0.7),
-                        ),
-                      ),
-                      title: Text(
-                        "${song.displayNameWOExt}",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      subtitle: Text(
-                        "$songArtist / ${song.album}",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.black.withOpacity(0.5)),
-                      ),
-                      onTap: () {
-                        if (playPause.playPauseIcon == Icons.play_circle) {
-                          playPause.changePlayPauseIcon();
-                        }
-                        // audioPlayer.play();
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MusicPlayerUI(
-                              songs,
-                              audioPlayer,
-                              index,
-                              Duration(seconds: 0),
-                              false,
-                            ),
-                          ),
-                        );
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Consumer<VisiblePlaylistSongs>(
+            builder: (context, isVisible, child) {
+              return Visibility(
+                visible:
+                    widget.playName == "Favj~{UB;q4{['#j[S7'g" ? false : true,
+                child: Card(
+                  color: Colors.black,
+                  child: ListTile(
+                    textColor: Colors.white,
+                    iconColor: Colors.white,
+                    leading: IconButton(
+                      onPressed: () {
+                        isVisible.changeVisibleOption(0, "");
                       },
-                    );
-                  },
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Text('Error fetching playlist songs');
-          } else {
-            return CircularProgressIndicator();
-          }
-        },
+                      icon: Icon(Icons.keyboard_backspace),
+                    ),
+                    title: Text(
+                      widget.playName == "j~{UB;q4{['#j[S7'g"
+                          ? "Favorite"
+                          : widget.playName,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          Consumer<FavoriteProvider>(
+            builder: (context, favValue, child) {
+              return FutureBuilder<List<SongModel>>(
+                future: _audioQuery.querySongs(
+                  sortType: null,
+                  orderType: OrderType.ASC_OR_SMALLER,
+                  uriType: UriType.EXTERNAL,
+                  ignoreCase: true,
+                ),
+                builder: (context, items) {
+                  var item = items.data;
+                  if (item != null) {
+                    if (items.hasData) {
+                      return Consumer<AllSongsList>(
+                        builder: (context, songsList, child) {
+                          return Consumer<HomeProvider>(
+                            builder: (context, value, child) {
+                              songsList.allSongs.clear();
+                              print(widget.playlists);
+                              playListSongData.clear();
+                              return ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(bottom: 100),
+                                itemCount: items.data!.length,
+                                itemBuilder: (context, index) {
+                                  if (playListSongData.length !=
+                                      playListSongs.length) {
+                                    playListSongData
+                                        .add(playListSongs[index].title);
+
+                                    items.data!.forEach((element) {
+                                      if (element.title.contains(
+                                          playListSongs[index].title)) {
+                                        songsList
+                                            .changeSongsListPlaylist(element);
+                                      }
+                                    });
+                                    if ((playListSongData.contains(
+                                        songsList.allSongs[index].title))) {
+                                      return AllSongs(
+                                        clr,
+                                        elvtion,
+                                        txtClr,
+                                        index,
+                                        false,
+                                        false,
+                                        isBtmSheet,
+                                        songsList.allSongs,
+                                        widget.audioPlayer,
+                                      );
+                                    }
+                                  }
+
+                                  return Container();
+                                },
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }
+                    if (item.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "No Songs Found",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
     );
   }

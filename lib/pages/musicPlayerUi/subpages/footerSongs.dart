@@ -33,7 +33,7 @@ class footerSongs extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return MusicList(Color(0xff001BF6).withOpacity(0.5), 0, Colors.white,
-            true, audioPlayer);
+            true, false, audioPlayer, "");
       },
     );
   }

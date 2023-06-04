@@ -12,6 +12,7 @@ class AllSongs extends StatelessWidget {
   Color txtClr;
   int index;
   bool isFav;
+  bool isPlay;
   bool isBtmSheet;
   var songModel;
   final AudioPlayer audioPlayer;
@@ -22,6 +23,7 @@ class AllSongs extends StatelessWidget {
     this.txtClr,
     this.index,
     this.isFav,
+    this.isPlay,
     this.isBtmSheet,
     this.songModel,
     this.audioPlayer,
@@ -92,10 +94,35 @@ class AllSongs extends StatelessWidget {
   Future<void> addSongToPlaylist(
       SongModel song, PlaylistModel playlist, context) async {
     await audioQuery.addToPlaylist(playlist.id, song.id);
-    print(
-        "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk ${playlist.id} ${song.id}");
 
     Navigator.pop(context);
+  }
+
+  List<PlaylistModel> playlists = [];
+
+  bool favId = false;
+  int favIndex = 0;
+
+  Future<void> showFavList(BuildContext context, SongModel song) async {
+    final updatedPlaylists = await audioQuery.queryPlaylists();
+    playlists = updatedPlaylists;
+
+    playlists.forEach((element) {
+      if (element.playlist == "j~{UB;q4{['#j[S7'g") {
+        favIndex = element.id;
+        favId = true;
+      }
+    });
+    if (favId) {
+      await audioQuery.addToPlaylist(favIndex, song.id);
+    } else {
+      checkFav(context, song);
+    }
+  }
+
+  checkFav(BuildContext context, SongModel song) async {
+    await audioQuery.createPlaylist("j~{UB;q4{['#j[S7'g");
+    showFavList(context, song);
   }
 
   @override
@@ -149,7 +176,10 @@ class AllSongs extends StatelessWidget {
                     ),
                     isFav
                         ? PopupMenuItem(
-                            onTap: () => favIndex.addFav(index),
+                            // onTap: () => favIndex.addFav(index),
+                            onTap: () {
+                              showFavList(context, songModel[index]);
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

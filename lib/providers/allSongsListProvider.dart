@@ -7,6 +7,9 @@ class AllSongsList with ChangeNotifier {
 
   changeSongsList(items) {
     _allSongs.addAll(items);
-    notifyListeners();
+  }
+
+  changeSongsListPlaylist(items) {
+    _allSongs.add(items);
   }
 }

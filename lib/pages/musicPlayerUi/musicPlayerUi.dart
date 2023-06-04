@@ -51,6 +51,7 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
   @override
   void initState() {
     super.initState();
+    songList.clear();
     playSong();
   }
 
@@ -194,8 +195,8 @@ class _MusicPlayerUIState extends State<MusicPlayerUI> {
     Size size = MediaQuery.of(context).size;
     final String albumCover = "assets/img/albumCover.jpg";
 
-    print(
-        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${widget.songModel[widget.songIndex].id}");
+    // print(
+    //     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${widget.songModel[widget.songIndex].id}");
     return Scaffold(
       backgroundColor: Color(0xff001BF6),
       appBar: AppBar(

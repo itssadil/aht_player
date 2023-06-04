@@ -12,10 +12,19 @@ class MusicList extends StatefulWidget {
   double elvtion;
   Color txtClr;
   bool isBtmSheet;
+  bool isFromPlaylist;
   final AudioPlayer audioPlayer;
+  var playlists;
 
   MusicList(
-      this.clr, this.elvtion, this.txtClr, this.isBtmSheet, this.audioPlayer);
+    this.clr,
+    this.elvtion,
+    this.txtClr,
+    this.isBtmSheet,
+    this.isFromPlaylist,
+    this.audioPlayer,
+    this.playlists,
+  );
 
   @override
   State<MusicList> createState() => _MusicListState();
@@ -25,12 +34,22 @@ class _MusicListState extends State<MusicList> {
   final OnAudioQuery _audioQuery = new OnAudioQuery();
 
   late int count;
+  List<SongModel> playListSongs = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     songCount();
+    if (widget.isFromPlaylist) {
+      playListSongsList();
+    }
+  }
+
+  Future<void> playListSongsList() async {
+    playListSongs = await _audioQuery.queryAudiosFrom(
+        AudiosFromType.PLAYLIST, widget.playlists.id);
+    print(
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa${playListSongs[0].title}");
   }
 
   songCount() async {
@@ -38,7 +57,7 @@ class _MusicListState extends State<MusicList> {
 
     if (songs != null) {
       count = songs.length;
-      print(count); // Output: 10 (Example count)
+      print("Total Songs: $count");
     }
   }
 
@@ -63,6 +82,7 @@ class _MusicListState extends State<MusicList> {
                     builder: (context, songsList, child) {
                       return Consumer<HomeProvider>(
                         builder: (context, value, child) {
+                          songsList.allSongs.clear();
                           switch (value.homeTab) {
                             case 1:
                               return ListView.builder(
@@ -82,8 +102,8 @@ class _MusicListState extends State<MusicList> {
                                       widget.txtClr,
                                       index,
                                       false,
+                                      false,
                                       widget.isBtmSheet,
-                                      // songModel,
                                       songsList.allSongs,
                                       widget.audioPlayer,
                                     );
@@ -108,8 +128,8 @@ class _MusicListState extends State<MusicList> {
                                           widget.txtClr,
                                           index,
                                           false,
+                                          false,
                                           widget.isBtmSheet,
-                                          // songModel,
                                           songsList.allSongs,
                                           widget.audioPlayer,
                                         )
@@ -119,8 +139,8 @@ class _MusicListState extends State<MusicList> {
                                           widget.txtClr,
                                           index,
                                           true,
+                                          false,
                                           widget.isBtmSheet,
-                                          // songModel,
                                           songsList.allSongs,
                                           widget.audioPlayer,
                                         );
