@@ -129,13 +129,17 @@ class _PlaylistSongsState extends State<PlaylistSongs> {
                                     });
                                     if ((playListSongData.contains(
                                         songsList.allSongs[index].title))) {
+                                      print(
+                                          "${playListSongs[index].id} ${playListSongs[index].title}");
                                       return AllSongs(
                                         clr,
                                         elvtion,
                                         txtClr,
                                         index,
                                         false,
-                                        false,
+                                        true,
+                                        widget.playlists,
+                                        playListSongs[index].id,
                                         isBtmSheet,
                                         songsList.allSongs,
                                         widget.audioPlayer,

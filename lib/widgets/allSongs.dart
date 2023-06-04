@@ -13,6 +13,8 @@ class AllSongs extends StatelessWidget {
   int index;
   bool isFav;
   bool isPlay;
+  int playId;
+  int playSongId;
   bool isBtmSheet;
   var songModel;
   final AudioPlayer audioPlayer;
@@ -24,6 +26,8 @@ class AllSongs extends StatelessWidget {
     this.index,
     this.isFav,
     this.isPlay,
+    this.playId,
+    this.playSongId,
     this.isBtmSheet,
     this.songModel,
     this.audioPlayer,
@@ -125,6 +129,13 @@ class AllSongs extends StatelessWidget {
     showFavList(context, song);
   }
 
+  Future<void> removeFromPlaylist(context, SongModel song) async {
+    await audioQuery.removeFromPlaylist(playId, playSongId);
+    print(playSongId);
+    print(playId);
+    // Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     String songArtist = songModel[index].artist.toString();
@@ -161,55 +172,75 @@ class AllSongs extends StatelessWidget {
             ),
             trailing: Consumer<FavoriteProvider>(
               builder: (context, favIndex, child) {
-                return PopupMenuButton(
-                  icon: Icon(Icons.more_vert, color: Colors.teal),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      onTap: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Share"),
-                          Icon(Icons.share),
-                        ],
-                      ),
-                    ),
-                    isFav
-                        ? PopupMenuItem(
-                            // onTap: () => favIndex.addFav(index),
-                            onTap: () {
-                              showFavList(context, songModel[index]);
-                            },
+                return isPlay
+                    ? PopupMenuButton(
+                        icon: Icon(Icons.more_vert, color: Colors.teal),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            onTap: () =>
+                                removeFromPlaylist(context, songModel[index]),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Favorite"),
-                                Icon(Icons.favorite),
-                              ],
-                            ),
-                          )
-                        : PopupMenuItem(
-                            onTap: () => favIndex.removeFav(index),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Unfavorite"),
-                                Icon(Icons.heart_broken),
+                                Text("Remove"),
+                                Icon(Icons.cancel_outlined),
                               ],
                             ),
                           ),
-                    PopupMenuItem(
-                      onTap: () => addPlaylistDialog(context, songModel[index]),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Add to Playlist"),
-                          Icon(Icons.add_box_rounded),
                         ],
-                      ),
-                    ),
-                  ],
-                );
+                      )
+                    : PopupMenuButton(
+                        icon: Icon(Icons.more_vert, color: Colors.teal),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            onTap: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Share"),
+                                Icon(Icons.share),
+                              ],
+                            ),
+                          ),
+                          isFav
+                              ? PopupMenuItem(
+                                  // onTap: () => favIndex.addFav(index),
+                                  onTap: () {
+                                    showFavList(context, songModel[index]);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Favorite"),
+                                      Icon(Icons.favorite),
+                                    ],
+                                  ),
+                                )
+                              : PopupMenuItem(
+                                  onTap: () => favIndex.removeFav(index),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Unfavorite"),
+                                      Icon(Icons.heart_broken),
+                                    ],
+                                  ),
+                                ),
+                          PopupMenuItem(
+                            onTap: () =>
+                                addPlaylistDialog(context, songModel[index]),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Add to Playlist"),
+                                Icon(Icons.add_box_rounded),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
               },
             ),
             onTap: () {
