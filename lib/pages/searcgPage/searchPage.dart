@@ -69,13 +69,11 @@ class SearchPage extends StatelessWidget {
                                       ),
                                       onTap: () {
                                         searchSongsList.clear();
-                                        // searchSongsList.add(songValue
-                                        //     .songInfo[index] as SongModel);
 
                                         allSongs.allSongs.forEach((element) {
-                                          if (element.id ==
+                                          if (element.title ==
                                               songValue.songInfo[index]
-                                                  ["_id"]) {
+                                                  ["title"]) {
                                             searchSongsList.add(element);
                                             searchSongsList
                                                 .addAll(allSongs.allSongs);
@@ -87,7 +85,7 @@ class SearchPage extends StatelessWidget {
                                             builder: (context) => MusicPlayerUI(
                                               searchSongsList,
                                               audioPlayer,
-                                              index,
+                                              0,
                                               Duration(seconds: 0),
                                               false,
                                             ),
