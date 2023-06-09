@@ -1,5 +1,6 @@
 import 'package:ahtplayer/pages/musicPlayerUi/musicPlayerUi.dart';
 import 'package:ahtplayer/providers/allSongsListProvider.dart';
+import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:ahtplayer/providers/searchValueProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -61,40 +62,52 @@ class SearchPage extends StatelessWidget {
                                     ScrollViewKeyboardDismissBehavior.onDrag,
                                 itemCount: songValue.songInfo.length,
                                 itemBuilder: (context, index) {
-                                  return Card(
-                                    child: ListTile(
-                                      leading: Icon(Icons.music_note),
-                                      title: Text(
-                                          songValue.songInfo[index]["title"]),
-                                      subtitle: Text(
-                                        "${songValue.songInfo[index]["_id"]}/${songValue.songInfo[index]["artist"] == "<unknown>" ? "Unknown Artist" : songValue.songInfo[index]["artist"]} / ${songValue.songInfo[index]["album"]}",
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      onTap: () {
-                                        searchSongsList.clear();
-
-                                        allSongs.allSongs.forEach((element) {
-                                          if (element.title ==
-                                              songValue.songInfo[index]
-                                                  ["title"]) {
-                                            newSongIndex = allSongs.allSongs
-                                                .indexOf(element);
-                                          }
-                                        });
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => MusicPlayerUI(
-                                              allSongs.allSongs,
-                                              audioPlayer,
-                                              newSongIndex,
-                                              Duration(seconds: 0),
-                                              false,
-                                            ),
+                                  return Consumer<PlayPause>(
+                                    builder: (context, playPause, child) {
+                                      return Card(
+                                        child: ListTile(
+                                          leading: Icon(Icons.music_note),
+                                          title: Text(songValue.songInfo[index]
+                                              ["title"]),
+                                          subtitle: Text(
+                                            "${songValue.songInfo[index]["_id"]}/${songValue.songInfo[index]["artist"] == "<unknown>" ? "Unknown Artist" : songValue.songInfo[index]["artist"]} / ${songValue.songInfo[index]["album"]}",
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        );
-                                      },
-                                    ),
+                                          onTap: () {
+                                            searchSongsList.clear();
+
+                                            allSongs.allSongs
+                                                .forEach((element) {
+                                              if (element.title ==
+                                                  songValue.songInfo[index]
+                                                      ["title"]) {
+                                                newSongIndex = allSongs.allSongs
+                                                    .indexOf(element);
+                                              }
+                                            });
+
+                                            if (playPause.playPauseIcon ==
+                                                Icons.play_circle) {
+                                              playPause.changePlayPauseIcon();
+                                            }
+
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MusicPlayerUI(
+                                                  allSongs.allSongs,
+                                                  audioPlayer,
+                                                  newSongIndex,
+                                                  Duration(seconds: 0),
+                                                  false,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
                               );
