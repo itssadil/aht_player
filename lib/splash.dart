@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'pages/homePage/homPage.dart';
-import 'pages/permissionChecker.dart';
+import 'permissionChecker.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);

@@ -1,3 +1,4 @@
+import 'package:ahtplayer/pages/homePage/subPages/footerPlaying.dart';
 import 'package:ahtplayer/pages/musicPlayerUi/musicPlayerUi.dart';
 import 'package:ahtplayer/providers/allSongsListProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
@@ -32,96 +33,104 @@ class SearchPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Search...'),
       ),
-      body: FutureBuilder(
-        future: getSongInfo("", context),
-        builder: (context, snapshot) {
-          return snapshot.connectionState == ConnectionState.done
-              ? Consumer<songValueList>(
-                  builder: (context, songValue, child) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Search song...",
+      body: Stack(
+        children: [
+          FutureBuilder(
+            future: getSongInfo("", context),
+            builder: (context, snapshot) {
+              return snapshot.connectionState == ConnectionState.done
+                  ? Consumer<songValueList>(
+                      builder: (context, songValue, child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Search song...",
+                                ),
+                                onChanged: (value) {
+                                  getSongInfo(value, context);
+                                },
+                              ),
                             ),
-                            onChanged: (value) {
-                              getSongInfo(value, context);
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: Consumer<AllSongsList>(
-                            builder: (context, allSongs, child) {
-                              return ListView.builder(
-                                keyboardDismissBehavior:
-                                    ScrollViewKeyboardDismissBehavior.onDrag,
-                                itemCount: songValue.songInfo.length,
-                                itemBuilder: (context, index) {
-                                  return Consumer<PlayPause>(
-                                    builder: (context, playPause, child) {
-                                      return Card(
-                                        child: ListTile(
-                                          leading: Icon(Icons.music_note),
-                                          title: Text(songValue.songInfo[index]
-                                              ["title"]),
-                                          subtitle: Text(
-                                            "${songValue.songInfo[index]["_id"]}/${songValue.songInfo[index]["artist"] == "<unknown>" ? "Unknown Artist" : songValue.songInfo[index]["artist"]} / ${songValue.songInfo[index]["album"]}",
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          onTap: () {
-                                            searchSongsList.clear();
-
-                                            allSongs.allSongs
-                                                .forEach((element) {
-                                              if (element.title ==
-                                                  songValue.songInfo[index]
-                                                      ["title"]) {
-                                                newSongIndex = allSongs.allSongs
-                                                    .indexOf(element);
-                                              }
-                                            });
-
-                                            if (playPause.playPauseIcon ==
-                                                Icons.play_circle) {
-                                              playPause.changePlayPauseIcon();
-                                            }
-
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MusicPlayerUI(
-                                                  allSongs.allSongs,
-                                                  audioPlayer,
-                                                  newSongIndex,
-                                                  Duration(seconds: 0),
-                                                  false,
-                                                ),
+                            Expanded(
+                              child: Consumer<AllSongsList>(
+                                builder: (context, allSongs, child) {
+                                  return ListView.builder(
+                                    keyboardDismissBehavior:
+                                        ScrollViewKeyboardDismissBehavior
+                                            .onDrag,
+                                    itemCount: songValue.songInfo.length,
+                                    itemBuilder: (context, index) {
+                                      return Consumer<PlayPause>(
+                                        builder: (context, playPause, child) {
+                                          return Card(
+                                            child: ListTile(
+                                              leading: Icon(Icons.music_note),
+                                              title: Text(songValue
+                                                  .songInfo[index]["title"]),
+                                              subtitle: Text(
+                                                "${songValue.songInfo[index]["_id"]}/${songValue.songInfo[index]["artist"] == "<unknown>" ? "Unknown Artist" : songValue.songInfo[index]["artist"]} / ${songValue.songInfo[index]["album"]}",
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            );
-                                          },
-                                        ),
+                                              onTap: () {
+                                                searchSongsList.clear();
+
+                                                allSongs.allSongs
+                                                    .forEach((element) {
+                                                  if (element.title ==
+                                                      songValue.songInfo[index]
+                                                          ["title"]) {
+                                                    newSongIndex = allSongs
+                                                        .allSongs
+                                                        .indexOf(element);
+                                                  }
+                                                });
+
+                                                if (playPause.playPauseIcon ==
+                                                    Icons.play_circle) {
+                                                  playPause
+                                                      .changePlayPauseIcon();
+                                                }
+
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MusicPlayerUI(
+                                                      allSongs.allSongs,
+                                                      audioPlayer,
+                                                      newSongIndex,
+                                                      Duration(seconds: 0),
+                                                      false,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        },
                                       );
                                     },
                                   );
                                 },
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                );
-        },
+            },
+          ),
+          FooterPlayingSection(audioPlayer),
+        ],
       ),
     );
   }
