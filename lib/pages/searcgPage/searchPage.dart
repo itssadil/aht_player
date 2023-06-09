@@ -1,8 +1,8 @@
-import 'package:ahtplayer/pages/homePage/subPages/footerPlaying.dart';
 import 'package:ahtplayer/pages/musicPlayerUi/musicPlayerUi.dart';
 import 'package:ahtplayer/providers/allSongsListProvider.dart';
 import 'package:ahtplayer/providers/playPauseProvider.dart';
 import 'package:ahtplayer/providers/searchValueProvider.dart';
+import 'package:ahtplayer/widgets/footerPlaying.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
