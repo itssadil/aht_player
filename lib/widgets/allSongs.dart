@@ -129,7 +129,7 @@ class AllSongs extends StatelessWidget {
     showFavList(context, song);
   }
 
-  Future<void> removeFromPlaylist(context, SongModel song) async {
+  Future<void> removeFromPlaylist(context, song) async {
     await audioQuery.removeFromPlaylist(playId, playSongId);
     print(playSongId);
     print(playId);
@@ -177,8 +177,9 @@ class AllSongs extends StatelessWidget {
                         icon: Icon(Icons.more_vert, color: Colors.teal),
                         itemBuilder: (context) => [
                           PopupMenuItem(
-                            onTap: () =>
-                                removeFromPlaylist(context, songModel[index]),
+                            onTap: () {
+                              removeFromPlaylist(context, songModel[index].id);
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -263,6 +264,7 @@ class AllSongs extends StatelessWidget {
                   ),
                 );
               } else {
+                print("aaaaaaaaaaaaaaaaaaaaaaa ${songModel[index].id}");
                 Navigator.push(
                   context,
                   MaterialPageRoute(

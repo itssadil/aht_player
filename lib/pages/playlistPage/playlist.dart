@@ -19,6 +19,7 @@ class _PlaylistState extends State<Playlist> {
   List<PlaylistModel> playlists = [];
 
   late String playlistName;
+  late String editPlaylistName;
 
   @override
   void initState() {
@@ -127,41 +128,47 @@ class _PlaylistState extends State<Playlist> {
               ),
               Visibility(
                 visible: !isVisible.isVisible,
-                child: Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: playlists.length,
-                    itemBuilder: (context, index) {
-                      final playlist = playlists[index];
-                      return ListTile(
-                        leading: Icon(Icons.queue_music),
-                        title: Text(
-                            "${playlist.playlist == "j~{UB;q4{['#j[S7'g" ? "Favorite" : playlist.playlist} (${playlist.numOfSongs})"),
-                        trailing: PopupMenuButton(
-                          icon: Icon(Icons.more_vert, color: Colors.teal),
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              onTap: () {
-                                removePlaylist(playlist);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Remove"),
-                                  Icon(Icons.cancel_outlined),
-                                ],
-                              ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: playlists.length,
+                  itemBuilder: (context, index) {
+                    final playlist = playlists[index];
+                    return ListTile(
+                      leading: Icon(Icons.queue_music),
+                      title: Text(
+                          "${playlist.playlist == "j~{UB;q4{['#j[S7'g" ? "Favorite" : playlist.playlist} (${playlist.numOfSongs})"),
+                      trailing: PopupMenuButton(
+                        icon: Icon(Icons.more_vert, color: Colors.teal),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            onTap: () {
+                              removePlaylist(playlist);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Remove"),
+                                Icon(Icons.cancel_outlined),
+                              ],
                             ),
-                          ],
-                        ),
-                        onTap: () {
-                          isVisible.changeVisibleOption(
-                              playlist.id, playlist.playlist);
-                        },
-                      );
-                    },
-                  ),
+                          ),
+                          PopupMenuItem(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Rename"),
+                                Icon(Icons.edit),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        isVisible.changeVisibleOption(
+                            playlist.id, playlist.playlist);
+                      },
+                    );
+                  },
                 ),
               ),
               Visibility(

@@ -11,6 +11,7 @@ Widget headerPic(
     artworkBorder: BorderRadius.circular(10),
     artworkHeight: size.width * 0.9,
     artworkWidth: size.width * 0.9,
+    artworkQuality: FilterQuality.high,
     nullArtworkWidget: Container(
       width: size.width * 0.9,
       height: size.width * 0.9,
